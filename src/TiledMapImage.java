@@ -9,11 +9,6 @@ public class TiledMapImage {
 
     private Set<BufferedImage> tileImages;
 
-    /**
-     * @param mapSize
-     * @param tileSize
-     * @param mapImageDir
-     */
     public TiledMapImage() {
         this.tileImages = new HashSet<>();
         try {

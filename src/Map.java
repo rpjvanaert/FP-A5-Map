@@ -29,7 +29,6 @@ public class Map {
         this.height = root.getJsonArray("layers").getJsonObject(0).getInt("height");
 
 
-
 //        JsonReader reader = null;
 //        reader = Json.createReader(getClass().getResourceAsStream(fileName));
 //        JsonObject root = reader.readObject();
@@ -65,9 +64,9 @@ public class Map {
 //        }
 
         this.map = new int[this.height][this.width];
-        for (int y = 0; y < this.height; y++){
+        for (int y = 0; y < this.height; y++) {
 
-            for (int x = 0; x < this.width; x++){
+            for (int x = 0; x < this.width; x++) {
 
                 int i = x + y * 32;
                 int adding = root.getJsonArray("layers").getJsonObject(0).getJsonArray("data").getInt(i);
@@ -82,9 +81,9 @@ public class Map {
             this.tileHeight = root.getJsonArray("tilesets").getJsonObject(0).getInt("tileheight");
             this.tileWidth = root.getJsonArray("tilesets").getJsonObject(0).getInt("tilewidth");
 
-            for (int y = 0; y < tilemap.getHeight(); y += this.tileHeight){
+            for (int y = 0; y < tilemap.getHeight(); y += this.tileHeight) {
 
-                for (int x = 0; x < tilemap.getWidth(); x += this.tileWidth){
+                for (int x = 0; x < tilemap.getWidth(); x += this.tileWidth) {
                     this.tiles.add(tilemap.getSubimage(x, y, this.tileWidth, this.tileHeight));
                 }
             }
@@ -93,19 +92,16 @@ public class Map {
         }
     }
 
-    void draw(Graphics2D g2d)
-    {
+    void draw(Graphics2D g2d) {
 
-        for(int y = 0; y < height; y++)
-        {
-            for(int x = 0; x < width; x++)
-            {
-                if(map[y][x] < 0)
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (map[y][x] < 0)
                     continue;
 
                 g2d.drawImage(
                         tiles.get(map[y][x]),
-                        AffineTransform.getTranslateInstance(x*tileWidth, y*tileHeight),
+                        AffineTransform.getTranslateInstance(x * tileWidth, y * tileHeight),
                         null);
             }
         }

@@ -21,9 +21,10 @@ public class MapLoaderMain extends Application {
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
         new AnimationTimer() {
             long last = -1;
+
             @Override
             public void handle(long now) {
-                if(last == -1)
+                if (last == -1)
                     last = now;
                 update((now - last) / 1000000000.0);
                 last = now;
@@ -40,32 +41,25 @@ public class MapLoaderMain extends Application {
     }
 
 
-    public void init()
-    {
+    public void init() {
         map = new Map("MapPreset1.json");
 
     }
 
 
-
-    public void draw(Graphics2D g)
-    {
+    public void draw(Graphics2D g) {
         g.setBackground(Color.black);
-        g.clearRect(0,0,(int)canvas.getWidth(), (int)canvas.getHeight());
+        g.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
         map.draw(g);
     }
 
-    public void update(double deltaTime)
-    {
+    public void update(double deltaTime) {
 
 
     }
 
 
-
-
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         launch(MapLoaderMain.class);
     }
 
