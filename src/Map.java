@@ -71,7 +71,6 @@ public class Map {
 
                 int i = x + y * 32;
                 int adding = root.getJsonArray("layers").getJsonObject(0).getJsonArray("data").getInt(i);
-                System.out.println(adding);
                 this.map[y][x] = adding;
             }
         }
@@ -102,9 +101,9 @@ public class Map {
             {
                 if(map[y][x] < 0)
                     continue;
-
+                
                 g2d.drawImage(
-                        tiles.get(map[y][x]),
+                        this.tiles.get(map[y][x] - 1),
                         AffineTransform.getTranslateInstance(x*tileWidth, y*tileHeight),
                         null);
             }
