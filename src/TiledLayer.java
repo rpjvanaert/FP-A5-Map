@@ -8,28 +8,28 @@ import java.util.ArrayList;
 
 public class TiledLayer implements Drawable {
 
-	private ArrayList<TiledTile> tiles;
+    private ArrayList<TiledTile> tiles;
 
-	/**
-	 * 
-	 * @param mapImage
-	 * @param jsonObject
-	 */
-	public TiledLayer(TiledMapImage mapImage, JsonObject jsonObject) {
-		this.tiles = new ArrayList<>();
+    /**
+     * @param mapImage
+     * @param jsonObject
+     */
+    public TiledLayer(TiledMapImage mapImage, JsonObject jsonObject) {
+        this.tiles = new ArrayList<>();
 
-		//todo json shit
-		JsonArray jsonArray = jsonObject.getJsonArray("data");
+        JsonArray dataArray = jsonObject.getJsonArray("data");
 
-		for (int i = 0; i < jsonArray.size(); i++) {
-			if(jsonArray.get(i).getValueType().equals(JsonValue.ValueType.NUMBER)){
-				Point2D pos = new Point2D.Double(i%jsonArray.size(), i);
-				tiles.add(new TiledTile(mapImage.getTile(jsonArray.getInt(i)),pos));
-			}
-		}
-	}
+        for (int i = 0; i < dataArray.size(); i++) {
+            if (dataArray.get(i).getValueType().equals(JsonValue.ValueType.NUMBER)) {
+                int mapSize = TiledMap.getMapSize();
+                Point2D pos = new Point2D.Double(i % mapSize, i / mapSize);
+                tiles.add(new TiledTile(mapImage.getTile(dataArray.getInt(i)), pos));
+            }
+        }
+    }
 
-	@Override
-	public void draw(FXGraphics2D graphics) {
-	}
+    @Override
+    public void draw(FXGraphics2D graphics) {
+
+    }
 }
