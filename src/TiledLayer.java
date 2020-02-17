@@ -22,7 +22,8 @@ public class TiledLayer implements Drawable {
         for (int i = 0; i < dataArray.size(); i++) {
             if (dataArray.get(i).getValueType().equals(JsonValue.ValueType.NUMBER)) {
                 int mapSize = TiledMap.getMapSize();
-                Point2D pos = new Point2D.Double(i % mapSize, i / mapSize);
+                int tileSize = TiledMap.getTileSize();
+                Point2D pos = new Point2D.Double((i % mapSize) * tileSize, (i / mapSize) * tileSize);
                 tiles.add(new TiledTile(mapImage.getTile(dataArray.getInt(i)), pos));
             }
         }
@@ -30,6 +31,8 @@ public class TiledLayer implements Drawable {
 
     @Override
     public void draw(FXGraphics2D graphics) {
-
+        for (TiledTile tile : tiles) {
+            tile.draw(graphics);
+        }
     }
 }

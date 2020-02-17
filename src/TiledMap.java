@@ -39,7 +39,9 @@ public class TiledMap implements Drawable {
 
     @Override
     public void draw(FXGraphics2D graphics) {
-
+        for (TiledLayer tiledLayer : tiledLayers) {
+            tiledLayer.draw(graphics);
+        }
     }
 
     public static String getMapImageDir() {

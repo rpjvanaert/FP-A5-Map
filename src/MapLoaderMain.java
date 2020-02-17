@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class MapLoaderMain extends Application {
 
-    private Map map;
+    private TiledMap tiledMap;
     private ResizableCanvas canvas;
 
     @Override
@@ -18,7 +18,7 @@ public class MapLoaderMain extends Application {
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(g -> draw(g), mainPane);
         mainPane.setCenter(canvas);
-        FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
+        FXGraphics2D graphics = new FXGraphics2D(canvas.getGraphicsContext2D());
         new AnimationTimer() {
             long last = -1;
 
@@ -28,25 +28,25 @@ public class MapLoaderMain extends Application {
                     last = now;
                 update((now - last) / 1000000000.0);
                 last = now;
-                draw(g2d);
+//                draw(g2d);
             }
         }.start();
 
         stage.setScene(new Scene(mainPane));
-        stage.setTitle("Fading image");
+        stage.setTitle("MApppppie");
         stage.show();
-        draw(g2d);
+        draw(graphics);
     }
 
     public void init() {
-        map = new Map("MapPreset1.json");
-
+        this.tiledMap = new TiledMap();
     }
 
-    public void draw(Graphics2D g) {
-        g.setBackground(Color.black);
-        g.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
-        map.draw(g);
+    public void draw(FXGraphics2D graphics) {
+        graphics.setBackground(Color.black);
+        graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+
+        tiledMap.draw(graphics);
     }
 
     public void update(double deltaTime) {
