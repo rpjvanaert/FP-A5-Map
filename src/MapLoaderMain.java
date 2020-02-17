@@ -14,7 +14,7 @@ public class MapLoaderMain extends Application {
     private ResizableCanvas canvas;
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(g -> draw(g), mainPane);
         mainPane.setCenter(canvas);
@@ -36,16 +36,12 @@ public class MapLoaderMain extends Application {
         stage.setTitle("Fading image");
         stage.show();
         draw(g2d);
-
-
     }
-
 
     public void init() {
         map = new Map("MapPreset1.json");
 
     }
-
 
     public void draw(Graphics2D g) {
         g.setBackground(Color.black);
@@ -55,9 +51,7 @@ public class MapLoaderMain extends Application {
 
     public void update(double deltaTime) {
 
-
     }
-
 
     public static void main(String[] args) {
         launch(MapLoaderMain.class);
