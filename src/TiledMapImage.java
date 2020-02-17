@@ -31,6 +31,8 @@ public class TiledMapImage {
      * @param gid
      */
     public BufferedImage getTile(int gid) {
+        System.out.println(gid);
+        System.out.println(tileImages.toArray()[gid].toString());
         return (BufferedImage) tileImages.toArray()[gid];
     }
 }
