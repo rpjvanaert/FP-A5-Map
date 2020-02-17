@@ -9,9 +9,7 @@ import org.jfree.fx.ResizableCanvas;
 import java.awt.*;
 
 public class Main extends Application {
-    private Map map;
     private TiledMap tiledMap;
-
     private ResizableCanvas canvas;
 
     public static void main(String[] args) {

@@ -23,6 +23,7 @@ public class TiledLayer implements Drawable {
             if (dataArray.get(i).getValueType().equals(JsonValue.ValueType.NUMBER)) {
                 int mapSize = TiledMap.getMapSize();
                 int tileSize = TiledMap.getTileSize();
+
                 Point2D pos = new Point2D.Double((i % mapSize) * tileSize, (i / mapSize) * tileSize);
                 tiles.add(new TiledTile(mapImage.getTile(dataArray.getInt(i)), pos));
             }

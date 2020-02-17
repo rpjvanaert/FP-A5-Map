@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 public class Map {
     private int width;
     private int height;
@@ -93,7 +92,6 @@ public class Map {
     }
 
     void draw(Graphics2D g2d) {
-
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (map[y][x] < 0)
@@ -105,8 +103,5 @@ public class Map {
                         null);
             }
         }
-
-
     }
-
 }
