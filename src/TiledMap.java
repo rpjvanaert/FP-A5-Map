@@ -10,6 +10,7 @@ public class TiledMap implements Drawable {
 
     private final int MAP_SIZE = 50;
     private final int TILE_SIZE = 32;
+
     private ArrayList<TiledLayer> tiledLayers;
 
     public TiledMap() {
