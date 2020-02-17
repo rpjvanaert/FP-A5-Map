@@ -31,6 +31,7 @@ public class TiledMap implements Drawable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override

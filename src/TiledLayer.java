@@ -10,12 +10,13 @@ public class TiledLayer implements Drawable {
 
     private ArrayList<TiledTile> tiles;
 
-    /**
-     * @param mapImage
-     * @param jsonObject
-     */
-    public TiledLayer(TiledMapImage mapImage, JsonObject jsonObject) {
-        this.tiles = new ArrayList<>();
+	/**
+	 *
+	 * @param mapImage
+	 * @param jsonObject
+	 */
+	public TiledLayer(TiledMapImage mapImage, JsonObject jsonObject) {
+		this.tiles = new ArrayList<>();
 
         JsonArray dataArray = jsonObject.getJsonArray("data");
 
