@@ -9,13 +9,13 @@ public class TiledTile implements Drawable {
 	private Point2D position;
 
 	/**
-	 * 
-	 * @param image
+	 *
+	 * @param tileImage
 	 * @param position
 	 */
-	public TiledTile(BufferedImage image, Point2D position) {
-		// TODO - implement TiledTile.TiledTile
-		throw new UnsupportedOperationException();
+	public TiledTile(BufferedImage tileImage, Point2D position) {
+		this.tileImage = tileImage;
+		this.position = position;
 	}
 
 	@Override

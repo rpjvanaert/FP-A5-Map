@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class TiledMap implements Drawable {
 
-    private final static String MAP_IMAGE_DIR = "Resources/terrain_atlas.jpg";
+    private final static String MAP_IMAGE_DIR = "Resources/terrain_atlas.png";
     private final static String MAP_LAYOUT_DIR = "Resources/map.json";
 
     private final static int MAP_SIZE = 32;
