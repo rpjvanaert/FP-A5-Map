@@ -1,3 +1,6 @@
+import DistanceMapLogic.DistanceMap;
+import DistanceMapLogic.TargetArea;
+import DistanceMapLogic.WalkableMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -7,6 +10,7 @@ import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public class Main extends Application {
     private TiledMap tiledMap;
@@ -14,6 +18,23 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(Main.class);
+//        Boolean[][] walkableMap = new Boolean[100][100];
+//
+//        for (int i = 0; i < 100; i++) {
+//            for (int j = 0; j < 100; j++) {
+//                walkableMap[i][j] = true;
+//            }
+//        }
+//
+//        DistanceMap distanceMap = new DistanceMap("Map", new TargetArea(new Point2D.Double(0, 0), new Point2D.Double(5, 5)), new WalkableMap(walkableMap));
+//
+//            for (int i = 0; i < 50; i++) {
+//                System.out.println();
+//                for (int j = 0; j < 50; j++) {
+//                    System.out.print(distanceMap.getMap()[i][j] + ",");
+//                }
+//            }
+
     }
 
     @Override
