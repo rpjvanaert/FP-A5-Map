@@ -14,7 +14,7 @@ public class TiledMap implements Drawable {
     private final static String SPRITESHEETS_DIR = "Resources/spritesheets/";
     private final static String MAP_LAYOUT_DIR = "Resources/festmap.json";
 
-    private static int MAP_WIDTH = 100;
+    private static int MAP_WIDTH = 100;//todo kunnen we deze niet beter op 0 initialiseren zodat je nooit out of bounds exceptions krijgt
     private static int MAP_HEIGHT = 100;
     private static int TILE_SIZE = 32;
 
