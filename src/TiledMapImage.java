@@ -2,7 +2,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TiledMapImage {
 
@@ -13,16 +14,22 @@ public class TiledMapImage {
         tileImages.add(null);
 
         try {
-            BufferedImage image = ImageIO.read(new File(TiledMap.getMapImageDir()));
+            File directory = new File(TiledMap.getSpritesheetsDir());
+            File[] files = directory.listFiles();
 
             int mapSize = TiledMap.getMapSize();
             int tileSize = TiledMap.getTileSize();
 
-            for (int y = 0; y < mapSize; y++) {
-                for (int x = 0; x < mapSize; x++) {
-                    this.tileImages.add(image.getSubimage(x*tileSize, y*tileSize, tileSize, tileSize));
+            for (File file : files) {
+                BufferedImage image = ImageIO.read(file);
+
+                for (int y = 0; y < mapSize; y++) {
+                    for (int x = 0; x < mapSize; x++) {
+                        this.tileImages.add(image.getSubimage(x * tileSize, y * tileSize, tileSize, tileSize));
+                    }
                 }
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
