@@ -14,7 +14,7 @@ public class TiledMap implements Drawable {
     private final static String SPRITESHEETS_DIR = "Resources/spritesheets";
     private final static String MAP_LAYOUT_DIR = "Resources/festmap.json";
 
-    private final static int MAP_SIZE = 32;
+    private final static int MAP_SIZE = 100;//todo get it from json
     private final static int TILE_SIZE = 32;
 
     private ArrayList<TiledLayer> tiledLayers;
@@ -25,12 +25,22 @@ public class TiledMap implements Drawable {
 
         try {
             JsonReader jsonReader = Json.createReader(new FileInputStream(new File(MAP_LAYOUT_DIR)));
-            JsonArray layersJsonArray = jsonReader.readObject().getJsonArray("layers"); // layers{}
+            JsonArray layersJsonArray = jsonReader.readObject().getJsonArray("layers");
+            jsonReader.close();
+            JsonReader jsonReader2 = Json.createReader(new FileInputStream(new File(MAP_LAYOUT_DIR)));
+            JsonArray tilesetsJsonArray = jsonReader2.readObject().getJsonArray("tilesets");
 
-            for (JsonObject layerJsonObject : layersJsonArray.getValuesAs(JsonObject.class)) {
-                tiledLayers.add(new TiledLayer(tiledMapImage, layerJsonObject));
+            for (JsonObject tileset : tilesetsJsonArray.getValuesAs(JsonObject.class)) {
+                tiledMapImage.initialise(tileset.getString("image"), tileset.getInt("firstgid"),
+                        tileset.getInt("imagewidth") / TILE_SIZE, tileset.getInt("imageheight") / TILE_SIZE);
             }
 
+            for (JsonObject layerJsonObject : layersJsonArray.getValuesAs(JsonObject.class)) {
+                if(layerJsonObject.getBoolean("visible"))
+                    tiledLayers.add(new TiledLayer(tiledMapImage, layerJsonObject));
+            }
+
+            jsonReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

@@ -17,15 +17,18 @@ public class TiledLayer implements Drawable {
     public TiledLayer(TiledMapImage mapImage, JsonObject jsonObject) {
         this.tiles = new ArrayList<>();
 
-        JsonArray dataArray = jsonObject.getJsonArray("data");
+        JsonArray gidArray = jsonObject.getJsonArray("data");
 
-        for (int i = 0; i < dataArray.size(); i++) {
-            if (dataArray.get(i).getValueType().equals(JsonValue.ValueType.NUMBER)) {
+        for (int i = 0; i < gidArray.size(); i++) {
+            System.out.println(gidArray.get(i));
+
+            if (gidArray.get(i).getValueType().equals(JsonValue.ValueType.NUMBER)) {
                 int mapSize = TiledMap.getMapSize();
                 int tileSize = TiledMap.getTileSize();
 
+
                 Point2D pos = new Point2D.Double((i % mapSize) * tileSize, (i / mapSize) * tileSize);
-                tiles.add(new TiledTile(mapImage.getTile(dataArray.getInt(i)), pos));
+                tiles.add(new TiledTile(mapImage.getTile(gidArray.getInt(i)), pos));
             }
         }
     }

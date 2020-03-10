@@ -56,7 +56,7 @@ public class Main extends Application {
 
                 update((now - last) / 1000000000.0);
                 last = now;
-                draw(graphics);
+//                draw(graphics);
             }
         }.start();
 
