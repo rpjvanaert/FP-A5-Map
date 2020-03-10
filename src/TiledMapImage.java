@@ -25,7 +25,7 @@ public class TiledMapImage {
         try {
             int tileSize = TiledMap.getTileSize(); // 32
             int counter = startingGID;
-            BufferedImage image = ImageIO.read(new File("Resources/spritesheets/"+spritesheetName));
+            BufferedImage image = ImageIO.read(new File(TiledMap.getSpritesheetsDir()+spritesheetName));
 
             for (int y = 0; y < mapHeight; y++) {
                 for (int x = 0; x < mapWidth; x++) {

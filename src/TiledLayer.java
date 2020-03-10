@@ -20,7 +20,6 @@ public class TiledLayer implements Drawable {
         JsonArray gidArray = jsonObject.getJsonArray("data");
 
         for (int i = 0; i < gidArray.size(); i++) {
-            System.out.println(gidArray.get(i));
 
             if (gidArray.get(i).getValueType().equals(JsonValue.ValueType.NUMBER)) {
                 int mapSize = TiledMap.getMapSize();
