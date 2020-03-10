@@ -67,10 +67,6 @@ public class Main extends Application {
         draw(graphics);
     }
 
-    public void init() {
-
-    }
-
     public void draw(FXGraphics2D g) {
         g.setBackground(Color.black);
         g.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());

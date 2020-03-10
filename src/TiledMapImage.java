@@ -18,7 +18,7 @@ public class TiledMapImage {
      * @param gid
      */
     public BufferedImage getTile(int gid) {
-        return (BufferedImage) tileImages.get(gid);
+        return tileImages.get(gid);
     }
 
     public void initialise(String spritesheetName, int startingGID, int mapWidth, int mapHeight) {

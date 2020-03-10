@@ -29,9 +29,6 @@ public class TiledMap implements Drawable {
             jsonReader.close();
             JsonArray layersJsonArray = baseJsonObject.getJsonArray("layers");
             JsonArray tilesetsJsonArray = baseJsonObject.getJsonArray("tilesets");
-//            JsonArray layersJsonArray = jsonReader.readObject().getJsonArray("layers");
-//            // JsonReader jsonReader2 = Json.createReader(new FileInputStream(new File(MAP_LAYOUT_DIR)));
-//            JsonArray tilesetsJsonArray = jsonReader.readObject().getJsonArray("tilesets");
 
             for (JsonObject tileset : tilesetsJsonArray.getValuesAs(JsonObject.class)) {
                 tiledMapImage.initialise(tileset.getString("image"), tileset.getInt("firstgid"),
@@ -57,10 +54,6 @@ public class TiledMap implements Drawable {
 
     public static String getSpritesheetsDir() {
         return SPRITESHEETS_DIR;
-    }
-
-    public static String getMapLayoutDir() {
-        return MAP_LAYOUT_DIR;
     }
 
     public static int getMapSize() {

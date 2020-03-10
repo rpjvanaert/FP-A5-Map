@@ -21,10 +21,9 @@ public class TiledLayer implements Drawable {
 
         for (int i = 0; i < gidArray.size(); i++) {
 
-            if (gidArray.getInt(i)!=0) {
+            if (gidArray.getInt(i) != 0) {
                 int mapSize = TiledMap.getMapSize();
                 int tileSize = TiledMap.getTileSize();
-
 
                 Point2D pos = new Point2D.Double((i % mapSize) * tileSize, (i / mapSize) * tileSize);
                 tiles.add(new TiledTile(mapImage.getTile(gidArray.getInt(i)), pos));
