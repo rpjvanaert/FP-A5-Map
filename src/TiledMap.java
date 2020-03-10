@@ -14,9 +14,9 @@ public class TiledMap implements Drawable {
     private final static String SPRITESHEETS_DIR = "Resources/spritesheets/";
     private final static String MAP_LAYOUT_DIR = "Resources/festmap.json";
 
-    private static int MAP_WIDTH = 100;//todo get it from json
-    private static int MAP_HEIGHT = 100;//todo get it from json
-    private static int TILE_SIZE = 32;//todo get this from json
+    private static int MAP_WIDTH = 100;
+    private static int MAP_HEIGHT = 100;
+    private static int TILE_SIZE = 32;
 
     private ArrayList<TiledLayer> tiledLayers;
 
