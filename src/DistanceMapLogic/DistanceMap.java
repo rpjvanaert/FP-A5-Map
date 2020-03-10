@@ -15,8 +15,9 @@ public class DistanceMap {
 
     /**
      * Makes a distanceMap which can be used to find the shortest path
-     * @param mapName The name of the map
-     * @param targetArea The point from which the DistanceMap starts (the 0 point)
+     *
+     * @param mapName     The name of the map
+     * @param targetArea  The point from which the DistanceMap starts (the 0 point)
      * @param walkableMap A map used to know if the surface is walkable for the NPC's
      */
     public DistanceMap(String mapName, TargetArea targetArea, WalkableMap walkableMap) {
@@ -27,7 +28,7 @@ public class DistanceMap {
 
         this.queue = new LinkedList<>();
         this.queue.offer(targetArea.getMiddlePoint());
-        this.map[(int)targetArea.getMiddlePoint().getX()][(int)targetArea.getMiddlePoint().getY()] = 0;
+        this.map[(int) targetArea.getMiddlePoint().getX()][(int) targetArea.getMiddlePoint().getY()] = 0;
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {

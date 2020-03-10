@@ -2,7 +2,6 @@ import org.jfree.fx.FXGraphics2D;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonValue;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -17,15 +16,17 @@ public class TiledLayer implements Drawable {
     public TiledLayer(TiledMapImage mapImage, JsonObject jsonObject) {
         this.tiles = new ArrayList<>();
 
-        JsonArray dataArray = jsonObject.getJsonArray("data");
+        JsonArray gidArray = jsonObject.getJsonArray("data");
 
-        for (int i = 0; i < dataArray.size(); i++) {
-            if (dataArray.get(i).getValueType().equals(JsonValue.ValueType.NUMBER)) {
-                int mapSize = TiledMap.getMapSize();
+        for (int i = 0; i < gidArray.size(); i++) {
+
+            if (gidArray.getInt(i) != 0) {
+                int mapWidth = TiledMap.getMapWidth();
+                int mapHeight = TiledMap.getMapHeight();
                 int tileSize = TiledMap.getTileSize();
 
-                Point2D pos = new Point2D.Double((i % mapSize) * tileSize, (i / mapSize) * tileSize);
-                tiles.add(new TiledTile(mapImage.getTile(dataArray.getInt(i)), pos));
+                Point2D pos = new Point2D.Double((i % mapWidth) * tileSize, (i / mapHeight) * tileSize);
+                tiles.add(new TiledTile(mapImage.getTile(gidArray.getInt(i)), pos));
             }
         }
     }

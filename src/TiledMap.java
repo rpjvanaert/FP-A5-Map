@@ -11,11 +11,12 @@ import java.util.ArrayList;
 
 public class TiledMap implements Drawable {
 
-    private final static String MAP_IMAGE_DIR = "Resources/terrain_atlas.png";
-    private final static String MAP_LAYOUT_DIR = "Resources/map.json";
+    private final static String SPRITESHEETS_DIR = "Resources/spritesheets/";
+    private final static String MAP_LAYOUT_DIR = "Resources/festmap.json";
 
-    private final static int MAP_SIZE = 32;
-    private final static int TILE_SIZE = 32;
+    private static int MAP_WIDTH = 100;
+    private static int MAP_HEIGHT = 100;
+    private static int TILE_SIZE = 32;
 
     private ArrayList<TiledLayer> tiledLayers;
 
@@ -25,10 +26,24 @@ public class TiledMap implements Drawable {
 
         try {
             JsonReader jsonReader = Json.createReader(new FileInputStream(new File(MAP_LAYOUT_DIR)));
-            JsonArray layersJsonArray = jsonReader.readObject().getJsonArray("layers"); // layers{}
+            JsonObject baseJsonObject = jsonReader.readObject();
+            jsonReader.close();
+
+            MAP_WIDTH = baseJsonObject.getInt("width");
+            MAP_HEIGHT = baseJsonObject.getInt("height");
+            TILE_SIZE = baseJsonObject.getInt("tilewidth");
+
+            JsonArray layersJsonArray = baseJsonObject.getJsonArray("layers");
+            JsonArray tilesetsJsonArray = baseJsonObject.getJsonArray("tilesets");
+
+            for (JsonObject tileset : tilesetsJsonArray.getValuesAs(JsonObject.class)) {
+                tiledMapImage.initialise(tileset.getString("image"), tileset.getInt("firstgid"),
+                        tileset.getInt("imagewidth") / TILE_SIZE, tileset.getInt("imageheight") / TILE_SIZE);
+            }
 
             for (JsonObject layerJsonObject : layersJsonArray.getValuesAs(JsonObject.class)) {
-                tiledLayers.add(new TiledLayer(tiledMapImage, layerJsonObject));
+                if (layerJsonObject.getBoolean("visible") && !layerJsonObject.getJsonString("type").toString().equals("objectgroup"))
+                    tiledLayers.add(new TiledLayer(tiledMapImage, layerJsonObject));
             }
 
         } catch (FileNotFoundException e) {
@@ -43,16 +58,16 @@ public class TiledMap implements Drawable {
         }
     }
 
-    public static String getMapImageDir() {
-        return MAP_IMAGE_DIR;
+    public static int getMapWidth() {
+        return MAP_WIDTH;
     }
 
-    public static String getMapLayoutDir() {
-        return MAP_LAYOUT_DIR;
+    public static int getMapHeight() {
+        return MAP_HEIGHT;
     }
 
-    public static int getMapSize() {
-        return MAP_SIZE;
+    public static String getSpritesheetsDir() {
+        return SPRITESHEETS_DIR;
     }
 
     public static int getTileSize() {

@@ -2,36 +2,38 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
 
 public class TiledMapImage {
-
-    private List<BufferedImage> tileImages;
+    //hash map to save the bufferedImages by their gid
+    private HashMap<Integer, BufferedImage> tileImages;
 
     public TiledMapImage() {
-        this.tileImages = new ArrayList<>();
-        tileImages.add(null);
-
-        try {
-            BufferedImage image = ImageIO.read(new File(TiledMap.getMapImageDir()));
-
-            int mapSize = TiledMap.getMapSize();
-            int tileSize = TiledMap.getTileSize();
-
-            for (int y = 0; y < mapSize; y++) {
-                for (int x = 0; x < mapSize; x++) {
-                    this.tileImages.add(image.getSubimage(x*tileSize, y*tileSize, tileSize, tileSize));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.tileImages = new HashMap<>();
     }
 
     /**
      * @param gid
      */
     public BufferedImage getTile(int gid) {
-        return (BufferedImage) tileImages.toArray()[gid];
+        return tileImages.get(gid);
+    }
+
+    public void initialise(String spritesheetName, int startingGID, int mapWidth, int mapHeight) {
+        try {
+            int tileSize = TiledMap.getTileSize();
+            int counter = startingGID;
+            BufferedImage image = ImageIO.read(new File(TiledMap.getSpritesheetsDir() + spritesheetName));
+
+            for (int y = 0; y < mapHeight; y++) {
+                for (int x = 0; x < mapWidth; x++) {
+                    this.tileImages.put(counter, image.getSubimage(x * tileSize, y * tileSize, tileSize, tileSize));
+                    counter++;
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

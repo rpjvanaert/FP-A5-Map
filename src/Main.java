@@ -1,6 +1,3 @@
-import DistanceMapLogic.DistanceMap;
-import DistanceMapLogic.TargetArea;
-import DistanceMapLogic.WalkableMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -10,7 +7,6 @@ import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 
 public class Main extends Application {
     private TiledMap tiledMap;
@@ -56,7 +52,7 @@ public class Main extends Application {
 
                 update((now - last) / 1000000000.0);
                 last = now;
-                draw(graphics);
+//                draw(graphics);
             }
         }.start();
 
@@ -65,10 +61,6 @@ public class Main extends Application {
         stage.show();
 
         draw(graphics);
-    }
-
-    public void init() {
-
     }
 
     public void draw(FXGraphics2D g) {
