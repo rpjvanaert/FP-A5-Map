@@ -11,11 +11,11 @@ import java.util.ArrayList;
 
 public class TiledMap implements Drawable {
 
-    private final static String SPRITESHEETS_DIR = "Resources/spritesheets";
+    private final static String SPRITESHEETS_DIR = "Resources/spritesheets/";
     private final static String MAP_LAYOUT_DIR = "Resources/festmap.json";
 
     private final static int MAP_SIZE = 100;//todo get it from json
-    private final static int TILE_SIZE = 32;
+    private final static int TILE_SIZE = 32;//todo get this from json
 
     private ArrayList<TiledLayer> tiledLayers;
 
