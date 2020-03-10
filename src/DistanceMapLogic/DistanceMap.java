@@ -11,6 +11,8 @@ public class DistanceMap {
     private Boolean[][] visited;
     private Boolean[][] walkableMap;
 
+    private final int size = 100;
+
     /**
      * Makes a distanceMap which can be used to find the shortest path
      * @param mapName The name of the map
@@ -19,66 +21,62 @@ public class DistanceMap {
      */
     public DistanceMap(String mapName, TargetArea targetArea, WalkableMap walkableMap) {
         this.mapName = mapName;
-        this.map = new int[100][100]; //todo uitlezen uit json
-        this.visited = new Boolean[100][100];
+        this.map = new int[size][size]; //todo uitlezen uit json
+        this.visited = new Boolean[size][size];
         this.walkableMap = walkableMap.getMap();
 
         this.queue = new LinkedList<>();
         this.queue.offer(targetArea.getMiddlePoint());
         this.map[(int)targetArea.getMiddlePoint().getX()][(int)targetArea.getMiddlePoint().getY()] = 0;
 
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 this.visited[i][j] = false;
             }
         }
 
         this.visited[(int)targetArea.getMiddlePoint().getX()][(int)targetArea.getMiddlePoint().getY()] = true;
-        BFS();
-    }
 
-    /**
-     * The Breadth-First Search Algorithm
-     * Loops trough every accessible point in the map and gives it the corresponding distance value
-     */
-    private void BFS() {
-        if (!this.queue.isEmpty()) {
+        /**
+         * The Breadth-First Search Algorithm
+         * Loops trough every accessible point in the map and gives it the corresponding distance value
+         */
+        while (!this.queue.isEmpty()) {
             Point2D currentPoint = this.queue.poll();
             int currentX = (int) currentPoint.getX();
             int currentY = (int) currentPoint.getY();
             //north
-                try {
-                    if (this.visited[currentX][currentY + 1] == false && this.walkableMap[currentX][currentY + 1] == true) {
-                        this.map[currentX][currentY + 1] = this.map[currentX][currentY] + 1;
-                        this.queue.offer(new Point2D.Double(currentX, currentY + 1));
-                        this.visited[currentX][currentY + 1] = true;
-                    }
-                } catch (Exception Ignore) {}
+            try {
+                if (this.visited[currentX][currentY + 1] == false && this.walkableMap[currentX][currentY + 1] == true) {
+                    this.map[currentX][currentY + 1] = this.map[currentX][currentY] + 1;
+                    this.queue.offer(new Point2D.Double(currentX, currentY + 1));
+                    this.visited[currentX][currentY + 1] = true;
+                }
+            } catch (Exception Ignore) {}
             //east
-                try {
-                    if (this.visited[currentX + 1][currentY] == false && this.walkableMap[currentX + 1][currentY] == true) {
-                        this.map[currentX + 1][currentY] = this.map[currentX][currentY] + 1;
-                        this.queue.offer(new Point2D.Double(currentX + 1, currentY));
-                        this.visited[currentX + 1][currentY] = true;
-                    }
-                } catch (Exception Ignore) {}
+            try {
+                if (this.visited[currentX + 1][currentY] == false && this.walkableMap[currentX + 1][currentY] == true) {
+                    this.map[currentX + 1][currentY] = this.map[currentX][currentY] + 1;
+                    this.queue.offer(new Point2D.Double(currentX + 1, currentY));
+                    this.visited[currentX + 1][currentY] = true;
+                }
+            } catch (Exception Ignore) {}
             //south
-                try {
-                    if (this.visited[currentX][currentY - 1] == false && this.walkableMap[currentX][currentY - 1] == true) {
-                        this.map[currentX][currentY - 1] = this.map[currentX][currentY] + 1;
-                        this.queue.offer(new Point2D.Double(currentX, currentY - 1));
-                        this.visited[currentX][currentY - 1] = true;
-                    }
-                } catch (Exception Ignore) {}
+            try {
+                if (this.visited[currentX][currentY - 1] == false && this.walkableMap[currentX][currentY - 1] == true) {
+                    this.map[currentX][currentY - 1] = this.map[currentX][currentY] + 1;
+                    this.queue.offer(new Point2D.Double(currentX, currentY - 1));
+                    this.visited[currentX][currentY - 1] = true;
+                }
+            } catch (Exception Ignore) {}
             //west
-                try {
-                    if (this.visited[currentX - 1][currentY] == false && this.walkableMap[currentX - 1][currentY] == true) {
-                        this.map[currentX - 1][currentY] = this.map[currentX][currentY] + 1;
-                        this.queue.offer(new Point2D.Double(currentX - 1, currentY));
-                        this.visited[currentX - 1][currentY] = true;
-                    }
-                } catch (Exception Ignore) {}
-            BFS();
+            try {
+                if (this.visited[currentX - 1][currentY] == false && this.walkableMap[currentX - 1][currentY] == true) {
+                    this.map[currentX - 1][currentY] = this.map[currentX][currentY] + 1;
+                    this.queue.offer(new Point2D.Double(currentX - 1, currentY));
+                    this.visited[currentX - 1][currentY] = true;
+                }
+            } catch (Exception Ignore) {}
         }
     }
 
