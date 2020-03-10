@@ -10,8 +10,6 @@ public class TiledMapImage {
 
     public TiledMapImage() {
         this.tileImages = new HashMap<>();
-        //if the gid is 0 there must be put no buffered image
-        tileImages.put(0, null);
     }
 
     /**
@@ -23,9 +21,9 @@ public class TiledMapImage {
 
     public void initialise(String spritesheetName, int startingGID, int mapWidth, int mapHeight) {
         try {
-            int tileSize = TiledMap.getTileSize(); // 32
+            int tileSize = TiledMap.getTileSize();
             int counter = startingGID;
-            BufferedImage image = ImageIO.read(new File(TiledMap.getSpritesheetsDir()+spritesheetName));
+            BufferedImage image = ImageIO.read(new File(TiledMap.getSpritesheetsDir() + spritesheetName));
 
             for (int y = 0; y < mapHeight; y++) {
                 for (int x = 0; x < mapWidth; x++) {
@@ -33,7 +31,6 @@ public class TiledMapImage {
                     counter++;
                 }
             }
-
 
         } catch (IOException e) {
             e.printStackTrace();

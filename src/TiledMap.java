@@ -14,8 +14,9 @@ public class TiledMap implements Drawable {
     private final static String SPRITESHEETS_DIR = "Resources/spritesheets/";
     private final static String MAP_LAYOUT_DIR = "Resources/festmap.json";
 
-    private final static int MAP_SIZE = 100;//todo get it from json
-    private final static int TILE_SIZE = 32;//todo get this from json
+    private static int MAP_WIDTH = 100;//todo get it from json
+    private static int MAP_HEIGHT = 100;//todo get it from json
+    private static int TILE_SIZE = 32;//todo get this from json
 
     private ArrayList<TiledLayer> tiledLayers;
 
@@ -27,6 +28,11 @@ public class TiledMap implements Drawable {
             JsonReader jsonReader = Json.createReader(new FileInputStream(new File(MAP_LAYOUT_DIR)));
             JsonObject baseJsonObject = jsonReader.readObject();
             jsonReader.close();
+
+            MAP_WIDTH = baseJsonObject.getInt("width");
+            MAP_HEIGHT = baseJsonObject.getInt("height");
+            TILE_SIZE = baseJsonObject.getInt("tilewidth");
+
             JsonArray layersJsonArray = baseJsonObject.getJsonArray("layers");
             JsonArray tilesetsJsonArray = baseJsonObject.getJsonArray("tilesets");
 
@@ -36,7 +42,7 @@ public class TiledMap implements Drawable {
             }
 
             for (JsonObject layerJsonObject : layersJsonArray.getValuesAs(JsonObject.class)) {
-                if(layerJsonObject.getBoolean("visible") && !layerJsonObject.getJsonString("type").toString().equals("objectgroup"))
+                if (layerJsonObject.getBoolean("visible") && !layerJsonObject.getJsonString("type").toString().equals("objectgroup"))
                     tiledLayers.add(new TiledLayer(tiledMapImage, layerJsonObject));
             }
 
@@ -52,12 +58,16 @@ public class TiledMap implements Drawable {
         }
     }
 
-    public static String getSpritesheetsDir() {
-        return SPRITESHEETS_DIR;
+    public static int getMapWidth() {
+        return MAP_WIDTH;
     }
 
-    public static int getMapSize() {
-        return MAP_SIZE;
+    public static int getMapHeight() {
+        return MAP_HEIGHT;
+    }
+
+    public static String getSpritesheetsDir() {
+        return SPRITESHEETS_DIR;
     }
 
     public static int getTileSize() {
