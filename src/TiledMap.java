@@ -25,10 +25,13 @@ public class TiledMap implements Drawable {
 
         try {
             JsonReader jsonReader = Json.createReader(new FileInputStream(new File(MAP_LAYOUT_DIR)));
-            JsonArray layersJsonArray = jsonReader.readObject().getJsonArray("layers");
+            JsonObject baseJsonObject = jsonReader.readObject();
             jsonReader.close();
-            JsonReader jsonReader2 = Json.createReader(new FileInputStream(new File(MAP_LAYOUT_DIR)));
-            JsonArray tilesetsJsonArray = jsonReader2.readObject().getJsonArray("tilesets");
+            JsonArray layersJsonArray = baseJsonObject.getJsonArray("layers");
+            JsonArray tilesetsJsonArray = baseJsonObject.getJsonArray("tilesets");
+//            JsonArray layersJsonArray = jsonReader.readObject().getJsonArray("layers");
+//            // JsonReader jsonReader2 = Json.createReader(new FileInputStream(new File(MAP_LAYOUT_DIR)));
+//            JsonArray tilesetsJsonArray = jsonReader.readObject().getJsonArray("tilesets");
 
             for (JsonObject tileset : tilesetsJsonArray.getValuesAs(JsonObject.class)) {
                 tiledMapImage.initialise(tileset.getString("image"), tileset.getInt("firstgid"),
@@ -36,11 +39,10 @@ public class TiledMap implements Drawable {
             }
 
             for (JsonObject layerJsonObject : layersJsonArray.getValuesAs(JsonObject.class)) {
-                if(layerJsonObject.getBoolean("visible"))
+                if(layerJsonObject.getBoolean("visible") && !layerJsonObject.getJsonString("type").toString().equals("objectgroup"))
                     tiledLayers.add(new TiledLayer(tiledMapImage, layerJsonObject));
             }
 
-            jsonReader.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
