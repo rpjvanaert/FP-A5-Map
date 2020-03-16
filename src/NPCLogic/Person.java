@@ -47,6 +47,7 @@ public class Person {
         String soundEffectPath;
 
         if (isArtist) {
+            //TODO: add artist sound effect.
             spriteSheetPath = "Artist.png";
             soundEffectPath = "ClassicLaugh.mp3";
         } else {
@@ -68,22 +69,22 @@ public class Person {
 
             } else if ((genreChance.get(6) - genreChance.get(5) - genreChance.get(4)) >= number && number > (genreChance.get(0) + genreChance.get(1) + genreChance.get(2))) {
                 spriteSheetPath = "rap.png";
-                soundEffectPath = "ClassicLaugh.mp3";
+                soundEffectPath = "TingGoSkrraOriginal.mp3";
                 this.favoriteGenre = Genres.RAP;
 
             } else if ((genreChance.get(6) - genreChance.get(5)) >= number && number > (genreChance.get(6) - genreChance.get(5) - genreChance.get(4))) {
                 spriteSheetPath = "Pop.png";
-                soundEffectPath = "ClassicLaugh.mp3";
+                soundEffectPath = "AdoringFan.mp3";
                 this.favoriteGenre = Genres.POP;
 
             } else if (genreChance.get(6) >= number && number > (genreChance.get(6) - genreChance.get(5))) {
-                spriteSheetPath = "electro.png";
-                soundEffectPath = "ClassicLaugh.mp3";
+                spriteSheetPath = "terminator.png";
+                soundEffectPath = "Terminator.mp3";
                 this.favoriteGenre = Genres.ELECTRONIC;
 
             } else {
-                spriteSheetPath = "country.png";
-                soundEffectPath = "ClassicLaugh.mp3";
+                spriteSheetPath = "visitor.png";
+                soundEffectPath = "VisitorHello.mp3";
                 this.favoriteGenre = Genres.COUNTRY;
             }
         }
