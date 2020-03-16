@@ -1,4 +1,4 @@
-package DistanceMapLogic;
+package MapData;
 
 import java.awt.geom.Point2D;
 

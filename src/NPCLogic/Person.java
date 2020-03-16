@@ -1,3 +1,5 @@
+package NPCLogic;
+
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
@@ -31,10 +33,10 @@ public class Person {
     private String targetMapName;
 
     /**
-     * A constructor of Person
-     * @param position the starting position of the Person
+     * A constructor of NPCLogic.Person
+     * @param position the starting position of the NPCLogic.Person
      * @param genreChanceList a list for the probability of liking a Genre
-     * @param speed the movement speed of the Person
+     * @param speed the movement speed of the NPCLogic.Person
      */
     public Person(Point2D position, ArrayList<Integer> genreChanceList, int speed) {
         this.position = position;
@@ -118,7 +120,7 @@ public class Person {
     }
 
     /**
-     * decides the behavior of the Person
+     * decides the behavior of the NPCLogic.Person
      */
     public void choiceMaker() {
         int number = (int) (Math.random() * ((10 - 1) + 1)) + 1;
@@ -238,7 +240,7 @@ public class Person {
     }
 
     /**
-     * checks if the Person has arrived at the target
+     * checks if the NPCLogic.Person has arrived at the target
      * @return
      */
     public boolean hasArrivedAtTarget(){
@@ -247,7 +249,7 @@ public class Person {
     }
 
     /**
-     *checks if the Person has arrived at it's end destination
+     *checks if the NPCLogic.Person has arrived at it's end destination
      */
     private boolean hasArrivedAtDestination() {
         double distanceAmount = 16;

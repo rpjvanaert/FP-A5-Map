@@ -1,3 +1,5 @@
+package MapData;
+
 import org.jfree.fx.FXGraphics2D;
 
 public interface Drawable {

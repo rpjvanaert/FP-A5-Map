@@ -1,4 +1,7 @@
-package DistanceMapLogic;
+package NPCLogic;
+
+import MapData.TargetArea;
+import MapData.WalkableMap;
 
 import java.awt.geom.Point2D;
 import java.util.LinkedList;

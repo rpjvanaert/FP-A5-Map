@@ -1,6 +1,8 @@
-import DistanceMapLogic.DistanceMap;
-import DistanceMapLogic.TargetArea;
-import DistanceMapLogic.WalkableMap;
+import NPCLogic.DistanceMap;
+import NPCLogic.Person;
+import MapData.TargetArea;
+import MapData.WalkableMap;
+import MapData.TiledMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -31,7 +33,7 @@ public class Main extends Application {
 
     private boolean showNull = false;
 
-    private static DistanceMapLogic.DistanceMap[] distanceMaps;
+    private static NPCLogic.DistanceMap[] distanceMaps;
     public static void main(String[] args) {
         launch(Main.class);
         Boolean[][] walkableMap = new Boolean[100][100];
@@ -42,7 +44,7 @@ public class Main extends Application {
             }
         }
 
-        DistanceMapLogic.DistanceMap distanceMap = new DistanceMap("Map", new TargetArea(new Point2D.Double(0, 0), new Point2D.Double(5, 5)), new WalkableMap(walkableMap));
+        NPCLogic.DistanceMap distanceMap = new DistanceMap("Map", new TargetArea(new Point2D.Double(0, 0), new Point2D.Double(5, 5)), new WalkableMap(walkableMap));
 
 //        for (int i = 0; i < 100; i++) {
 //            System.out.println();
@@ -140,7 +142,7 @@ public class Main extends Application {
             if (spawnPosition.distance(person.getPosition()) <= 64) {
                 return false;
             }
-//            if(!PathCalculator.isWalkable(spawnPosition)){
+//            if(!NPCLogic.PathCalculator.isWalkable(spawnPosition)){
 //                return false;
 //            }
         }
@@ -219,7 +221,7 @@ public class Main extends Application {
         }
     }
 
-    public static DistanceMapLogic.DistanceMap[] getDistanceMaps() {
+    public static NPCLogic.DistanceMap[] getDistanceMaps() {
         return distanceMaps;
     }
 
@@ -243,7 +245,7 @@ public class Main extends Application {
         this.predictedGuests = predictedGuests;
     }
 
-    public static DistanceMapLogic.DistanceMap getDistanceMap(String mapName){
+    public static NPCLogic.DistanceMap getDistanceMap(String mapName){
         for (DistanceMap dm : distanceMaps) {
             if (dm.getMapName().equals(mapName))
                 return dm;

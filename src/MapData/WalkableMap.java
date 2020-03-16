@@ -1,3 +1,5 @@
+package MapData;
+
 public class WalkableMap {
     private Boolean[][] walkableMap;
 

@@ -1,9 +1,11 @@
+package NPCLogic;
+
 import java.awt.geom.Point2D;
 
 public class PathCalculator {
 
     /**
-     * Calculates the next target for a Person, allows movement in 8 directions
+     * Calculates the next target for a NPCLogic.Person, allows movement in 8 directions
      * @param currPos the current position of the character
      * @param mapName the name of the map of the destination of the character
      * @return the next position the character moves to
@@ -13,7 +15,7 @@ public class PathCalculator {
         int Xindex = (int) Math.floor(currPos.getX() / 32.0);
         int Yindex = (int) Math.floor(currPos.getY() / 32.0);
 
-        DistanceMapLogic.DistanceMap distanceMap = Main.getDistanceMap(mapName);
+        NPCLogic.DistanceMap distanceMap = Main.getDistanceMap(mapName);
         Point2D middlePointCoords = new Point2D.Double(distanceMap.getTarget().getMiddlePoint().getX() * 32, distanceMap.getTarget().getMiddlePoint().getY() * 32);
         if(middlePointCoords.distance(currPos) <= 32){
             return new Point2D.Double(-1,-1);
@@ -48,7 +50,7 @@ public class PathCalculator {
      * @return the available tile, if not found return the currentPosition
      */
     public static Point2D findRandomClosestWalkable(Point2D currentPosition, String mapName){
-        DistanceMapLogic.DistanceMap distanceMap = Main.getDistanceMap(mapName);
+        NPCLogic.DistanceMap distanceMap = Main.getDistanceMap(mapName);
         int failedAttempts = 0;
         while( failedAttempts < 8) {
             int xPos = (int) Math.floor(Math.random() * 2.9) - 1 + ((int)currentPosition.getX())/32;
@@ -68,7 +70,7 @@ public class PathCalculator {
     }
 
     public static boolean isWalkable(Point2D currentPosition){
-        DistanceMapLogic.DistanceMap[] distanceMaps = Main.getDistanceMaps();
+        NPCLogic.DistanceMap[] distanceMaps = Main.getDistanceMaps();
         Boolean [][] walkableMap = distanceMaps[1].getWalkableMap();
         int xPos = (int)currentPosition.getX()/32;
         int yPos = (int)currentPosition.getY()/32;

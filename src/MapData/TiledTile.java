@@ -1,3 +1,5 @@
+package MapData;
+
 import org.jfree.fx.FXGraphics2D;
 
 import java.awt.geom.Point2D;
