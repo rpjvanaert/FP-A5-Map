@@ -1,7 +1,6 @@
 import MapData.MapDataController;
 import NPCLogic.DistanceMap;
 import NPCLogic.Person;
-import MapData.WalkableMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -35,31 +34,23 @@ public class Main extends Application {
     private static DistanceMap[] distanceMaps;
 
     public static void main(String[] args) {
-       // launch(Main.class);
-//        boolean[][] walkableMap = new boolean[100][100];
-//
-//        for (int i = 0; i < 100; i++) {
-//            for (int j = 0; j < 100; j++) {
-//                walkableMap[i][j] = true;
-//            }
-//        }
+        launch(Main.class);
 
-        MapDataController mapDataController = new MapDataController();
-        WalkableMap walkableMap = mapDataController.getWalkableMap();
-        for (int i = 0; i < walkableMap.getMap().length; i++) {
-            for (int j = 0; j < walkableMap.getMap()[1].length; j++) {
-                System.out.print(walkableMap.getMap()[i][j] ? "T, " : "F, ");
+        DistanceMap distanceMap = MapDataController.getDistanceMap(MapDataController.getTargetAreas()[0]);
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 100; j++) {
+                System.out.println(distanceMap.getMap()[i][j]);
             }
-            System.out.println();
         }
+    }
 
-//        DistanceMap distanceMap = new DistanceMap("Map", new TargetArea(new Point2D.Double(10,20), new Point2D.Double(50,10)), walkableMap);
-//        for (int i = 0; i < walkableMap.getMap().length; i++) {
-//            for (int j = 0; j < walkableMap.getMap()[0].length; j++) {
-//                System.out.print(distanceMap.getMap()[i][j] + ", ");
-//            }
-//            System.out.println();
-//        }
+    public void init() {
+        mapDataController = new MapDataController();
+        this.people = new ArrayList<>();
+        distanceMaps = new DistanceMap[stageAmount + toiletAmount];
+
+        createPredictions();
+        spawnPeople(peopleAmount);
     }
 
     @Override
@@ -67,8 +58,6 @@ public class Main extends Application {
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(this::draw, mainPane);
         mainPane.setCenter(canvas);
-
-        mapDataController = new MapDataController();
 
         FXGraphics2D graphics = new FXGraphics2D(canvas.getGraphicsContext2D());
         this.cameraTransform = new CameraTransform(canvas);
@@ -84,6 +73,7 @@ public class Main extends Application {
                 draw(graphics);
             }
         }.start();
+
         canvas.setOnMouseClicked(e -> {
             clickAction(e);
 //            if (e.getButton() == MouseButton.SECONDARY){
@@ -94,10 +84,12 @@ public class Main extends Application {
 //                    System.out.println("Shows: CameraTransformed");
 //                }
 //            } else
-            if (e.getButton() == MouseButton.PRIMARY){
+
+            if (e.getButton() == MouseButton.PRIMARY) {
                 this.init();
             }
         });
+
         stage.setScene(new Scene(mainPane));
         stage.setTitle("A5 FP");
         stage.show();
@@ -113,6 +105,7 @@ public class Main extends Application {
 
     /**
      * Spawns a amount of people, stops spawning after 10% failed spawnAttempts of the amount
+     *
      * @param amount the amount of people to be spawned
      */
     public void spawnPeople(int amount) {
@@ -120,10 +113,10 @@ public class Main extends Application {
 
         for (int i = 0; i < amount; i++) {
 
-            Point2D newSpawnLocation = new Point2D.Double(Math.random() * 100 * 32, Math.random() * 100  * 32);
+            Point2D newSpawnLocation = new Point2D.Double(Math.random() * 100 * 32, Math.random() * 100 * 32);
             if (canSpawn(newSpawnLocation)) {
                 this.people.add(new Person(new Point2D.Double(newSpawnLocation.getX(),
-                        newSpawnLocation.getY() ), this.Prediction, this.globalSpeed));
+                        newSpawnLocation.getY()), this.Prediction, this.globalSpeed, false));
                 failedSpawnAttempts = 0;
             } else {
                 failedSpawnAttempts++;
@@ -137,6 +130,7 @@ public class Main extends Application {
 
     /**
      * A method that checks if a spot is not occupied by another person
+     *
      * @param spawnPosition the location to check if it's available
      * @return true if empty, false if occupied
      */
@@ -149,9 +143,6 @@ public class Main extends Application {
             if (spawnPosition.distance(person.getPersonLogic().getPosition()) <= 64) {
                 return false;
             }
-//            if(!NPCLogic.PathCalculator.isWalkable(spawnPosition)){
-//                return false;
-//            }
         }
 
         return true;
@@ -183,53 +174,23 @@ public class Main extends Application {
         this.Prediction.add(Total);
     }
 
-    public void init()  {
-        this.people = new ArrayList<>();
-        this.distanceMaps = new DistanceMap[stageAmount + toiletAmount];
-
-        // initialing DistanceMap
-
-        boolean[][] walkableMap = new boolean[100][100];
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
-                walkableMap[i][j] = true;
-            }
-        }
-        for (int i = 33; i < 66; i++) {
-            for (int j = 33; j < 66; j++) {
-                walkableMap[i][j] = false;
-            }
-        }
-
-        WalkableMap wMap = new WalkableMap(walkableMap);
-//        DistanceMap testMap1 = new DistanceMap("TestMap1", new TargetArea(new Point2D.Double(80,20), (new Point2D.Double(30,10)) ),wMap);
-//        DistanceMap testMap2 = new DistanceMap("TestMap2", new TargetArea(new Point2D.Double(20,80), new Point2D.Double(0,20)), wMap);
-//        DistanceMap testMap3 = new DistanceMap("TestMap3", new TargetArea(new Point2D.Double(80,80), new Point2D.Double(50,50)), wMap);
-//        distanceMaps = new DistanceMap[]{testMap1,testMap2,testMap3};
-
-        createPredictions();
-        spawnPeople(peopleAmount);
-            }
-
     public void draw(FXGraphics2D g) {
         Point2D p2d = this.cameraTransform.getCenterPoint();
         double zoom = cameraTransform.getZoom();
-        g.clearRect(-(int)p2d.getX(), -(int)p2d.getY(), (int) (canvas.getWidth() / zoom), (int) (canvas.getHeight() / zoom));
-        if (!this.showNull){
+        g.clearRect(-(int) p2d.getX(), -(int) p2d.getY(), (int) (canvas.getWidth() / zoom), (int) (canvas.getHeight() / zoom));
+        if (!this.showNull) {
             g.setTransform(this.cameraTransform.getTransform());
         } else {
             g.setTransform(new AffineTransform());
         }
         g.setBackground(Color.black);
         g.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+
         mapDataController.draw(g);
+
         for (Person person : people) {
             person.draw(g);
         }
-    }
-
-    public static NPCLogic.DistanceMap[] getDistanceMaps() {
-        return distanceMaps;
     }
 
     public void setPeopleAmount(int peopleAmount) {
@@ -250,14 +211,5 @@ public class Main extends Application {
 
     public void setPredictedGuests(boolean predictedGuests) {
         this.predictedGuests = predictedGuests;
-    }
-
-    public static NPCLogic.DistanceMap getDistanceMap(String mapName){
-        for (DistanceMap dm : distanceMaps) {
-            if (dm.getMapName().equals(mapName))
-                return dm;
-        }
-
-        return null;
     }
 }

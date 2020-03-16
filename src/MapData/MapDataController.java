@@ -31,8 +31,8 @@ public class MapDataController implements Drawable {
     private ArrayList<TiledLayer> tiledLayers;
 
     private WalkableMap walkableMap;
-    private TargetArea[] targetAreas;
-    private DistanceMap[] distanceMaps;
+    private static TargetArea[] targetAreas;
+    private static DistanceMap[] distanceMaps;
     /**
      * constructor
      * first the TiledMapImage is created
@@ -70,6 +70,7 @@ public class MapDataController implements Drawable {
                     populateWalkableMap(layerJsonObject);
 
                 } else if (layerJsonObject.getJsonString("type").toString().equals("objectgroup")) {
+                    System.out.println("Found objectgroup: " + layerJsonObject.getString("name"));
                     populateTargetAreas(layerJsonObject);
 
                 } else if (layerJsonObject.getBoolean("visible"))
@@ -138,7 +139,7 @@ public class MapDataController implements Drawable {
         }
     }
 
-    public DistanceMap getDistanceMap(String name) {
+    public static DistanceMap getDistanceMap(String name) {
         for (DistanceMap distanceMap : distanceMaps) {
             if (distanceMap.getMapName().equals(name)) {
                 return distanceMap;
@@ -147,12 +148,13 @@ public class MapDataController implements Drawable {
         return null;
     }
 
-    public DistanceMap getDistanceMap(TargetArea targetArea) {
+    public static DistanceMap getDistanceMap(TargetArea targetArea) {
         for (DistanceMap distanceMap : distanceMaps) {
             if (distanceMap.getTarget().equals(targetArea)) {
                 return distanceMap;
             }
         }
+
         return null;
     }
 
@@ -167,7 +169,7 @@ public class MapDataController implements Drawable {
         return walkableMap;
     }
 
-    public TargetArea[] getTargetAreas() {
+    public static TargetArea[] getTargetAreas() {
         return targetAreas;
     }
 

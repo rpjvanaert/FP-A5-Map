@@ -1,3 +1,5 @@
+package NPCLogic;
+
 public enum Genres {
     ALTERNATIVE_ROCK("Alternative rock", "Metal"),
     BLUES("Blues","Classic"),
