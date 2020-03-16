@@ -1,5 +1,8 @@
 package NPCLogic;
 
+import MapData.MapDataController;
+import MapData.TargetArea;
+
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.Random;
@@ -10,26 +13,32 @@ public class PersonLogic {
     private double speed;
     private Point2D target;
     private double rotationSpeed;
-    private String targetMapName;
+//    private String targetMapName;
+    private DistanceMap distanceMap;
     private String activity;
     private Person person;
     private Point2D newPosition;
 
     private int negativeFeedback = 5;
 
+    private boolean isArtist;
 
-    public PersonLogic(Point2D position, double speed, Person person) {
+    public PersonLogic(Point2D position, double speed, Person person, boolean isArtist) {
         this.position = position;
         this.person = person;
         this.angle = 0;
         this.speed = speed;
         this.rotationSpeed = 100;
-        this.targetMapName = selectRandomMap();
+        selectRandomMap();
+        this.isArtist = isArtist;
+        target = PathCalculator.nextPositionToTarget(this.position, distanceMap);
     }
 
     public void choiceMaker() {
-        int number = (int) (Math.random() * ((10 - 1) + 1)) + 1;
-        if (number > 5/*this.favoriteGenre==genre.getSuperGenre()*/) {
+        Random random = new Random();
+        int number = random.nextInt(11);
+        //int number = (int) (Math.random() * ((10 - 1) + 1)) + 1;
+        if (number <= 5/*this.favoriteGenre==genre.getSuperGenre()*/) {
             //change back once integrated with the main application
             if (number < 2) {
                 System.out.println("didn't go, so idle");
@@ -88,9 +97,9 @@ public class PersonLogic {
         return rotationSpeed;
     }
 
-    public String getTargetMapName() {
-        return targetMapName;
-    }
+    //public String getTargetMapName() {
+   //     return targetMapName;
+   // }
 
     public Person getPerson() {
         return person;
@@ -104,9 +113,9 @@ public class PersonLogic {
         this.speed = speed;
     }
 
-    public void setTargetMapName(String mapName){
-        this.targetMapName = mapName;
-    }
+//    public void setTargetMapName(String mapName) {
+//        this.targetMapName = mapName;
+//    }
 
     public void setPosition(Point2D position) {
         this.position = position;
@@ -130,61 +139,63 @@ public class PersonLogic {
 
     /**
      * checks if the NPCLogic.Person has arrived at the target
+     *
      * @return
      */
-    public boolean hasArrivedAtTarget(){
+    public boolean hasArrivedAtTarget() {
         double distanceAmount = 17;
         return position.distance(target.getX(), target.getY()) < distanceAmount;
     }
 
     /**
-     *checks if the NPCLogic.Person has arrived at it's end destination
+     * checks if the Person has arrived at it's end destination
      */
     private boolean hasArrivedAtDestination() {
         double distanceAmount = 16;
-        if(this.target.distance(new Point2D.Double(-1,-1)) < distanceAmount){
-            return true;
-        }
-        return false;
+        return this.target.distance(new Point2D.Double(-1, -1)) < distanceAmount;
     }
 
-    public void setNextTarget(){
-        this.target = PathCalculator.nextTarget(this.position, targetMapName);
+    public void setNextTarget() {
+        this.target = PathCalculator.nextPositionToTarget(this.position, distanceMap);
     }
 
     /**
      * For testing purposes!
      * Selects a random distanceMap
+     *
      * @return the name of the map
      */
-    public String selectRandomMap(){
-        Random random = new Random();
-        String mapName = null;
-        int randomNumber = random.nextInt(3);
-        switch (randomNumber){
-            case 0: mapName = "TestMap1";
-                break;
-            case 1: mapName = "TestMap2";
-                break;
-            case 2: mapName = "TestMap3";
-                break;
+    public void selectRandomMap() {
 
+        //TODO: Rename this function and check if it is an artist or visitor with isArtist boolean
+
+        if (isArtist){
+            // Not a random target unless artist doesn't have anything in his schedule at this time
+            // TODO: Add artist logic to assign a target stage
+        } else {
+            TargetArea[] targetAreas = MapDataController.getTargetAreas();
+            Random random = new Random();
+            int index = random.nextInt(targetAreas.length);
+
+            TargetArea.TargetAreaType targetAreaType = targetAreas[index].getTargetAreaType();
+            if (targetAreaType.equals(TargetArea.TargetAreaType.ALL) || targetAreaType.equals(TargetArea.TargetAreaType.VISITOR)) {
+                this.distanceMap = MapDataController.getDistanceMap(targetAreas[index]);
+            } else selectRandomMap();
         }
-        return mapName;
     }
 
     public Point2D getNewPosition() {
         return newPosition;
     }
 
-    public void update(){
-        if (hasArrivedAtDestination()){
-            targetMapName = selectRandomMap();
+    public void update() {
+        if (hasArrivedAtDestination()) {
+            selectRandomMap();
+            //targetMapName = selectRandomMap();
             setNextTarget();
-        } else if (hasArrivedAtTarget()){
+        } else if (hasArrivedAtTarget()) {
             setNextTarget();
         }
-
 
         double targetAngle = Math.atan2(this.target.getY() - this.position.getY(),
                 this.target.getX() - this.position.getX());
@@ -195,7 +206,6 @@ public class PersonLogic {
         while (angleDifference > Math.PI)
             angleDifference -= 2 * Math.PI;
 
-
         if (Math.abs(angleDifference) < this.rotationSpeed)
             this.angle = targetAngle;
         else if (angleDifference < 0)
@@ -205,7 +215,9 @@ public class PersonLogic {
 
         this.newPosition = new Point2D.Double(this.position.getX() + this.speed * Math.cos(this.angle),
                 this.position.getY() + this.speed * Math.sin(this.angle));
-
     }
 
+    public DistanceMap getDistanceMap() {
+        return this.distanceMap;
+    }
 }
