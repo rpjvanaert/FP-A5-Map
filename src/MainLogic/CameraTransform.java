@@ -2,6 +2,7 @@ package MainLogic;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
@@ -27,15 +28,18 @@ public class CameraTransform {
             zoom *= (1 + event.getDeltaY()/150.0f);
         });
 
-        node.setOnMouseDragged(event -> {
-            if (event.getButton() == MouseButton.SECONDARY){
-                centerPoint = new Point2D.Double(
-                        centerPoint.getX() + (event.getX() - lastMousePos.getX()) / zoom,
-                        centerPoint.getY() + ( event.getY() - lastMousePos.getY()) / zoom
-                );
-            }
-            lastMousePos = new Point2D.Double(event.getX(), event.getY());
-        });
+      node.setOnMouseDragged(event ->  mouseDragged(event));
+//            if (event.getButton() == MouseButton.SECONDARY){
+//                centerPoint = new Point2D.Double(
+//                        centerPoint.getX() + (event.getX() - lastMousePos.getX()) / zoom,
+//                        centerPoint.getY() + ( event.getY() - lastMousePos.getY()) / zoom
+//                );
+//            }
+//            lastMousePos = new Point2D.Double(event.getX(), event.getY());
+//        });
+
+
+
 
         node.setOnMousePressed(event -> lastMousePos = new Point2D.Double(event.getX(), event.getY()));
         this.canvas = node;
@@ -49,8 +53,9 @@ public class CameraTransform {
         if (centerPoint != null){
             AffineTransform tx = new AffineTransform();
 //            tx.translate(-lastMousePos.getX(), -lastMousePos.getY());
+            tx.translate(lastMousePos.getX(), lastMousePos.getY());
             tx.scale(zoom, zoom);
-//            tx.translate(lastMousePos.getX(), lastMousePos.getY());
+            //tx.translate(lastMousePos.getX(), lastMousePos.getY());
             tx.translate(centerPoint.getX(), centerPoint.getY());
             try {
                 this.inverseTransform = tx.createInverse();
@@ -67,4 +72,13 @@ public class CameraTransform {
         Point2D.Double relP2D = new Point2D.Double(x * inverseTransform.getScaleX() + inverseTransform.getTranslateX(), y * inverseTransform.getScaleY() + inverseTransform.getTranslateY());
         return relP2D;
     }
+        public void mouseDragged(MouseEvent e) {
+            if(e.getButton() == MouseButton.MIDDLE) {
+                centerPoint = new Point2D.Double(
+                        centerPoint.getX() - (lastMousePos.getX() - e.getX()) / zoom,
+                        centerPoint.getY() - (lastMousePos.getY() - e.getY()) / zoom
+                );
+                lastMousePos = new Point2D.Double(e.getX(), e.getY());
+            }
+        }
 }
