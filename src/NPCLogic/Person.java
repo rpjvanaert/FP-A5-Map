@@ -18,19 +18,12 @@ import java.util.Random;
  * A class to represent a visitor
  */
 public class Person {
-    private Point2D position;
-    private double angle;
-    private double speed;
+
     private BufferedImage sprite;
     private String favoriteGenre;
     private Media soundEffect;
     private MediaPlayer mediaPlayer;
-    private String activity;
-    private int negativeFeedback = 5;
-
-    private Point2D target;
-    private double rotationSpeed;
-    private String targetMapName;
+    private PersonLogic personLogic;
 
     /**
      * A constructor of NPCLogic.Person
@@ -39,13 +32,10 @@ public class Person {
      * @param speed the movement speed of the NPCLogic.Person
      */
     public Person(Point2D position, ArrayList<Integer> genreChanceList, int speed) {
-        this.position = position;
+
         imageDecider(genreChanceList);
-        this.angle = 0;
-        this.speed = speed;
-        this.target = position;
-        this.rotationSpeed = 100;
-        this.targetMapName = selectRandomMap();
+        this.personLogic = new PersonLogic(position,speed, this);
+
     }
 
     /**
@@ -119,107 +109,37 @@ public class Person {
         this.mediaPlayer = new MediaPlayer(this.soundEffect);
     }
 
+    public PersonLogic getPersonLogic() {
+        return personLogic;
+    }
+
     /**
      * decides the behavior of the NPCLogic.Person
      */
-    public void choiceMaker() {
-        int number = (int) (Math.random() * ((10 - 1) + 1)) + 1;
-        if (number > 5/*this.favoriteGenre==genre.getSuperGenre()*/) {
-            //change back once integrated with the main application
-            if (number < 2) {
-                System.out.println("didn't go, so idle");
-                this.negativeFeedback--;
-            } else {
-                System.out.println("did go to the show");
-                this.negativeFeedback = 5;
-            }
-        } else {
-            if (number <= this.negativeFeedback) {
-                System.out.println("didn't go, so idle");
-                this.negativeFeedback--;
-            } else {
-                System.out.println("did go to the show");
-                this.negativeFeedback = 5;
-            }
-        }
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
 
     public void update(ArrayList<Person> people) {
 
-        if (hasArrivedAtDestination()){
-            this.targetMapName = selectRandomMap();
-            setNextTarget();
-        } else if (hasArrivedAtTarget()){
-            setNextTarget();
-        }
-
-
-        double targetAngle = Math.atan2(this.target.getY() - this.position.getY(),
-                this.target.getX() - this.position.getX());
-
-        double angleDifference = this.angle - targetAngle;
-        while (angleDifference < -Math.PI)
-            angleDifference += 2 * Math.PI;
-        while (angleDifference > Math.PI)
-            angleDifference -= 2 * Math.PI;
-
-
-        if (Math.abs(angleDifference) < this.rotationSpeed)
-            this.angle = targetAngle;
-        else if (angleDifference < 0)
-            this.angle += this.rotationSpeed;
-        else
-            this.angle -= this.rotationSpeed;
-
-        Point2D newPosition = new Point2D.Double(this.position.getX() + this.speed * Math.cos(this.angle),
-                this.position.getY() + this.speed * Math.sin(this.angle));
-
+this.personLogic.update();
         //colliding handler
         boolean collided = false;
 
         for (Person other : people) {
-            if (other != this && newPosition.distance(other.position) < 32) {
+            if (other != this && this.personLogic.getNewPosition().distance(other.personLogic.getPosition()) < 32) {
                 collided = true;
             }
         }
 
         if (!collided) {
-            this.position = newPosition;
+            this.personLogic.setPosition(this.personLogic.getNewPosition());
         } else {
-            this.target = PathCalculator.findRandomClosestWalkable(this.position,this.targetMapName);
+            this.personLogic.setTarget(PathCalculator.findRandomClosestWalkable(this.personLogic.getPosition(),this.personLogic.getTargetMapName()));
         }
     }
 
     public void draw(Graphics2D g) {
-        g.drawImage(sprite, getTransform(), null);
+        g.drawImage(sprite, this.personLogic.getTransform(), null);
     }
 
-    public Point2D getPosition() {
-        return position;
-    }
-
-    private AffineTransform getTransform() {
-        AffineTransform tx = new AffineTransform();
-        tx.translate(position.getX() - this.sprite.getWidth() / 2, position.getY() - this.sprite.getHeight() / 2);
-        tx.rotate(this.angle, this.sprite.getWidth() / 2, this.sprite.getHeight() / 2);
-        return tx;
-    }
-
-    public void setTarget(Point2D target) {
-        this.target = target;
-    }
-
-    public String getActivity() {
-        return activity;
-    }
-
-    public void setActivity(String activity) {
-        this.activity = activity;
-    }
 
     /**
      * Plays an soundEffect according to the genre
@@ -235,52 +155,7 @@ public class Person {
 
     }
 
-    public void setTargetMapName(String mapName){
-        this.targetMapName = mapName;
-    }
-
-    /**
-     * checks if the NPCLogic.Person has arrived at the target
-     * @return
-     */
-    public boolean hasArrivedAtTarget(){
-        double distanceAmount = 17;
-        return position.distance(target.getX(), target.getY()) < distanceAmount;
-    }
-
-    /**
-     *checks if the NPCLogic.Person has arrived at it's end destination
-     */
-    private boolean hasArrivedAtDestination() {
-        double distanceAmount = 16;
-        if(this.target.distance(new Point2D.Double(-1,-1)) < distanceAmount){
-            return true;
-        }
-        return false;
-    }
-
-    public void setNextTarget(){
-        this.target = PathCalculator.nextTarget(this.position, targetMapName);
-    }
-
-    /**
-     * For testing purposes!
-     * Selects a random distanceMap
-     * @return the name of the map
-     */
-    public String selectRandomMap(){
-        Random random = new Random();
-        String mapName = null;
-        int randomNumber = random.nextInt(3);
-        switch (randomNumber){
-            case 0: mapName = "TestMap1";
-            break;
-            case 1: mapName = "TestMap2";
-            break;
-            case 2: mapName = "TestMap3";
-            break;
-
-        }
-        return mapName;
+    public BufferedImage getSprite() {
+        return sprite;
     }
 }

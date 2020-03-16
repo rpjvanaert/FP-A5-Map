@@ -23,7 +23,7 @@ public class CameraTransform {
         });
 
         node.setOnMouseDragged(event -> {
-            if (event.getButton() == MouseButton.MIDDLE){
+            if (event.getButton() == MouseButton.SECONDARY){
                 centerPoint = new Point2D.Double(
                         centerPoint.getX() + (event.getX() - lastMousePos.getX()) / zoom,
                         centerPoint.getY() + ( event.getY() - lastMousePos.getY()) / zoom

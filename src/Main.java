@@ -146,7 +146,7 @@ public class Main extends Application {
         }
 
         for (Person person : people) {
-            if (spawnPosition.distance(person.getPosition()) <= 64) {
+            if (spawnPosition.distance(person.getPersonLogic().getPosition()) <= 64) {
                 return false;
             }
 //            if(!NPCLogic.PathCalculator.isWalkable(spawnPosition)){
@@ -159,7 +159,7 @@ public class Main extends Application {
 
     public void clickAction(MouseEvent e) {
         for (Person person : this.people) {
-            if (person.getPosition().distance(new Point2D.Double(e.getX(), e.getY())) < 32) {
+            if (person.getPersonLogic().getPosition().distance(new Point2D.Double(e.getX(), e.getY())) < 32) {
                 person.playSoundEffect();
             }
         }
