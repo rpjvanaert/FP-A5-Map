@@ -20,8 +20,8 @@ public class TargetArea {
     }
 
     public Point2D getMiddlePoint() {
-        double xPos = position.getX() + size.getX() * 0.5;
-        double yPos = position.getY() + size.getY() * 0.5;
+        double xPos = (position.getX() + size.getX() * 0.5) / 32;
+        double yPos = (position.getY() + size.getY() * 0.5) / 32;
         return new Point2D.Double(xPos, yPos);
     }
 
