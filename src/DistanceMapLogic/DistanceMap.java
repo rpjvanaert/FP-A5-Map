@@ -10,8 +10,17 @@ public class DistanceMap {
     private Queue<Point2D> queue;
     private Boolean[][] visited;
     private Boolean[][] walkableMap;
+    private TargetArea target;
 
     private final int size = 100;
+
+    public TargetArea getTarget() {
+        return target;
+    }
+
+    public Boolean[][] getWalkableMap() {
+        return walkableMap;
+    }
 
     /**
      * Makes a distanceMap which can be used to find the shortest path
@@ -25,10 +34,11 @@ public class DistanceMap {
         this.map = new int[size][size]; //todo uitlezen uit json
         this.visited = new Boolean[size][size];
         this.walkableMap = walkableMap.getMap();
+        this.target = targetArea;
 
         this.queue = new LinkedList<>();
         this.queue.offer(targetArea.getMiddlePoint());
-        this.map[(int) targetArea.getMiddlePoint().getX()][(int) targetArea.getMiddlePoint().getY()] = 0;
+        this.map[(int)targetArea.getMiddlePoint().getX()][(int)targetArea.getMiddlePoint().getY()] = 0;
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
