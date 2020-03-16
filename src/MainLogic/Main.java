@@ -198,7 +198,7 @@ public class Main extends Application {
     public void draw(FXGraphics2D g) {
         g.setTransform(this.cameraTransform.getTransform());
         Point2D p0 = this.cameraTransform.getRelPoint2D(0,0);
-        Point2D p1 = this.cameraTransform.getRelPoint2D(this.canvas.getWidth(), this.canvas.getHeight());
+        Point2D p1 = this.cameraTransform.getRelPoint2D(1920, 1080);
         g.clearRect((int)p0.getX(), (int)p0.getY(), (int)p1.getX(), (int)p1.getY());
         g.setBackground(Color.black);
         tiledMap.draw(g);
