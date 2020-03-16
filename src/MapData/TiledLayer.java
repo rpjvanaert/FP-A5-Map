@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 /**
  * this is the object that holds the tiles for that layer
- *
  */
 public class TiledLayer implements Drawable {
 
@@ -19,7 +18,7 @@ public class TiledLayer implements Drawable {
      * constructor
      * where
      *
-     * @param mapImage this object holds all the sprites and from here we get them for each place of the map
+     * @param mapImage        this object holds all the sprites and from here we get them for each place of the map
      * @param jsonObjectLayer in here the is the data stored what on this layer has to be printed
      */
     public TiledLayer(TiledMapImage mapImage, JsonObject jsonObjectLayer) {
@@ -29,9 +28,9 @@ public class TiledLayer implements Drawable {
         JsonArray gidArray = jsonObjectLayer.getJsonArray("data");
 
         //get the values now so we only have to do it once
-        int mapWidth = TiledMap.getMapWidth();
-        int mapHeight = TiledMap.getMapHeight();
-        int tileSize = TiledMap.getTileSize();
+        int mapWidth = MapDataController.getMapWidth();
+        int mapHeight = MapDataController.getMapHeight();
+        int tileSize = MapDataController.getTileSize();
 
         //loop trough every value
         for (int i = 0; i < gidArray.size(); i++) {
