@@ -20,6 +20,8 @@ public class CameraTransform {
     public CameraTransform(Canvas node){
         this.zoom = 1.0;
         this.centerPoint = new Point2D.Double(0,0);
+        this.inverseTransform = new AffineTransform();
+        this.lastMousePos = new Point2D.Double(0,0);
         node.setOnScroll(event -> {
             lastMousePos = new Point2D.Double(event.getX(), event.getY());
             zoom *= (1 + event.getDeltaY()/150.0f);
@@ -50,8 +52,9 @@ public class CameraTransform {
     public AffineTransform getTransform(){
         if (centerPoint != null){
             AffineTransform tx = new AffineTransform();
+            tx.translate(-lastMousePos.getX(), -lastMousePos.getY());
             tx.scale(zoom, zoom);
-            tx.translate(centerPoint.getX(), centerPoint.getY());
+            tx.translate(lastMousePos.getX()/zoom, lastMousePos.getY()/zoom);
             try {
                 this.inverseTransform = tx.createInverse();
             } catch (NoninvertibleTransformException e) {

@@ -32,8 +32,6 @@ public class Main extends Application {
     private boolean predictedGuests = true;
     private ArrayList<Integer> Prediction = new ArrayList<>();
 
-    private boolean showNull = false;
-
     private static NPCLogic.DistanceMap[] distanceMaps;
     public static void main(String[] args) {
         launch(Main.class);
@@ -198,10 +196,8 @@ public class Main extends Application {
             }
 
     public void draw(FXGraphics2D g) {
-        Point2D p2d = this.cameraTransform.getCenterPoint();
-        double zoom = cameraTransform.getZoom();
-        g.clearRect(-(int)p2d.getX(), -(int)p2d.getY(), (int) (canvas.getWidth() / zoom), (int) (canvas.getHeight() / zoom));
         g.setTransform(this.cameraTransform.getTransform());
+        g.clearRect((int)this.cameraTransform.getRelPoint2D(0,0).getX(), (int)this.cameraTransform.getRelPoint2D(0,0).getY(), (int)this.cameraTransform.getRelPoint2D(canvas.getWidth(),0).getX(), (int)this.cameraTransform.getRelPoint2D(0,canvas.getHeight()).getY());
         g.setBackground(Color.black);
         tiledMap.draw(g);
         for (Person person : people) {
