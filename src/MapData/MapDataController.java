@@ -110,7 +110,17 @@ public class MapDataController implements Drawable {
             JsonObject targetArea = targetsJsonArray.getJsonObject(i);
 
             String name = targetArea.getString("name");
-            TargetArea.TargetAreaType targetAreaType = TargetArea.TargetAreaType.valueOf(targetArea.getString("type"));
+
+            TargetArea.TargetAreaType targetAreaType = TargetArea.TargetAreaType.ALL;
+            switch (targetArea.getString("type")) {
+                case "Visitor":
+                    targetAreaType = TargetArea.TargetAreaType.VISITOR;
+                    break;
+                case "Artist":
+                    targetAreaType = TargetArea.TargetAreaType.ARTIST;
+                    break;
+            }
+
             Point2D pos = new Point2D.Double(targetArea.getInt("x"), targetArea.getInt("y"));
             Point2D size = new Point2D.Double(targetArea.getInt("width"), targetArea.getInt("height"));
 
