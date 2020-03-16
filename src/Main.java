@@ -1,8 +1,7 @@
+import MapData.MapDataController;
 import NPCLogic.DistanceMap;
 import NPCLogic.Person;
-import MapData.TargetArea;
 import MapData.WalkableMap;
-import MapData.TiledMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -19,7 +18,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 public class Main extends Application {
-    private TiledMap tiledMap;
+    private MapDataController mapDataController;
     private ResizableCanvas canvas;
     private ArrayList<Person> people;
 
@@ -33,26 +32,34 @@ public class Main extends Application {
 
     private boolean showNull = false;
 
-    private static NPCLogic.DistanceMap[] distanceMaps;
+    private static DistanceMap[] distanceMaps;
+
     public static void main(String[] args) {
-        launch(Main.class);
-        Boolean[][] walkableMap = new Boolean[100][100];
-
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
-                walkableMap[i][j] = true;
-            }
-        }
-
-        NPCLogic.DistanceMap distanceMap = new DistanceMap("Map", new TargetArea(new Point2D.Double(0, 0), new Point2D.Double(5, 5)), new WalkableMap(walkableMap));
-
+       // launch(Main.class);
+//        boolean[][] walkableMap = new boolean[100][100];
+//
 //        for (int i = 0; i < 100; i++) {
-//            System.out.println();
 //            for (int j = 0; j < 100; j++) {
-//                System.out.print(distanceMap.getMap()[i][j] + ",");
+//                walkableMap[i][j] = true;
 //            }
 //        }
 
+        MapDataController mapDataController = new MapDataController();
+        WalkableMap walkableMap = mapDataController.getWalkableMap();
+        for (int i = 0; i < walkableMap.getMap().length; i++) {
+            for (int j = 0; j < walkableMap.getMap()[1].length; j++) {
+                System.out.print(walkableMap.getMap()[i][j] ? "T, " : "F, ");
+            }
+            System.out.println();
+        }
+
+//        DistanceMap distanceMap = new DistanceMap("Map", new TargetArea(new Point2D.Double(10,20), new Point2D.Double(50,10)), walkableMap);
+//        for (int i = 0; i < walkableMap.getMap().length; i++) {
+//            for (int j = 0; j < walkableMap.getMap()[0].length; j++) {
+//                System.out.print(distanceMap.getMap()[i][j] + ", ");
+//            }
+//            System.out.println();
+//        }
     }
 
     @Override
@@ -61,7 +68,7 @@ public class Main extends Application {
         canvas = new ResizableCanvas(this::draw, mainPane);
         mainPane.setCenter(canvas);
 
-        tiledMap = new TiledMap();
+        mapDataController = new MapDataController();
 
         FXGraphics2D graphics = new FXGraphics2D(canvas.getGraphicsContext2D());
         this.cameraTransform = new CameraTransform(canvas);
@@ -182,7 +189,7 @@ public class Main extends Application {
 
         // initialing DistanceMap
 
-        Boolean[][] walkableMap = new Boolean[100][100];
+        boolean[][] walkableMap = new boolean[100][100];
         for (int i = 0; i < 100; i++) {
             for (int j = 0; j < 100; j++) {
                 walkableMap[i][j] = true;
@@ -195,10 +202,10 @@ public class Main extends Application {
         }
 
         WalkableMap wMap = new WalkableMap(walkableMap);
-        DistanceMap testMap1 = new DistanceMap("TestMap1", new TargetArea(new Point2D.Double(80,20), (new Point2D.Double(30,10)) ),wMap);
-        DistanceMap testMap2 = new DistanceMap("TestMap2", new TargetArea(new Point2D.Double(20,80), new Point2D.Double(0,20)), wMap);
-        DistanceMap testMap3 = new DistanceMap("TestMap3", new TargetArea(new Point2D.Double(80,80), new Point2D.Double(50,50)), wMap);
-        distanceMaps = new DistanceMap[]{testMap1,testMap2,testMap3};
+//        DistanceMap testMap1 = new DistanceMap("TestMap1", new TargetArea(new Point2D.Double(80,20), (new Point2D.Double(30,10)) ),wMap);
+//        DistanceMap testMap2 = new DistanceMap("TestMap2", new TargetArea(new Point2D.Double(20,80), new Point2D.Double(0,20)), wMap);
+//        DistanceMap testMap3 = new DistanceMap("TestMap3", new TargetArea(new Point2D.Double(80,80), new Point2D.Double(50,50)), wMap);
+//        distanceMaps = new DistanceMap[]{testMap1,testMap2,testMap3};
 
         createPredictions();
         spawnPeople(peopleAmount);
@@ -215,7 +222,7 @@ public class Main extends Application {
         }
         g.setBackground(Color.black);
         g.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
-        tiledMap.draw(g);
+        mapDataController.draw(g);
         for (Person person : people) {
             person.draw(g);
         }

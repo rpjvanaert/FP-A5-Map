@@ -1,13 +1,13 @@
 package MapData;
 
 public class WalkableMap {
-    private Boolean[][] walkableMap;
+    private boolean[][] walkableMap;
 
-    public WalkableMap(Boolean[][] walkableMap) {
+    public WalkableMap(boolean[][] walkableMap) {
         this.walkableMap = walkableMap;
     }
 
-    public Boolean[][] getMap() {
+    public boolean[][] getMap() {
         return walkableMap;
     }
 }

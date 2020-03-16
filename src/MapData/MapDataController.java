@@ -6,6 +6,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  * this object is the mother object of the map
  * all the tiled layers are stored here
  */
-public class TiledMap implements Drawable {
+public class MapDataController implements Drawable {
     //static finals for where you can find the sprites and the layout json file
     private final static String SPRITESHEETS_DIR = "Resources/spritesheets/";
     private final static String MAP_LAYOUT_DIR = "Resources/festmap.json";
@@ -28,12 +29,15 @@ public class TiledMap implements Drawable {
     //arraylist where the layers are stored
     private ArrayList<TiledLayer> tiledLayers;
 
+    private WalkableMap walkableMap;
+    private TargetArea[] targetAreas;
+
     /**
      * constructor
      * first the TiledMapImage is created
      * then the json file is read out and for each layer a new object is created
      */
-    public TiledMap() {
+    public MapDataController() {
         this.tiledLayers = new ArrayList<>();
 
         //create the tiledMapImage object so we can add to it the sprites later
@@ -60,14 +64,57 @@ public class TiledMap implements Drawable {
                         tileset.getInt("imagewidth") / TILE_SIZE, tileset.getInt("imageheight") / TILE_SIZE);
             }
 
-            //for each layer we create a tiledLayer object
             for (JsonObject layerJsonObject : layersJsonArray.getValuesAs(JsonObject.class)) {
-                if (layerJsonObject.getBoolean("visible") && !layerJsonObject.getJsonString("type").toString().equals("objectgroup"))
+                if (layerJsonObject.getJsonString("name").toString().equals("Walkable")) {
+                    populateWalkableMap(layerJsonObject);
+
+                } else if (layerJsonObject.getJsonString("type").toString().equals("objectgroup")) {
+                    populateTargetAreas(layerJsonObject);
+
+                } else if (layerJsonObject.getBoolean("visible"))
                     tiledLayers.add(new TiledLayer(tiledMapImage, layerJsonObject));
             }
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("MapDataController.MapDataController: could not find file in " + MAP_LAYOUT_DIR);
+            //e.printStackTrace();
+        }
+    }
+
+    /**
+     * This function sets the value of WalkableMap at index i,j to true when at that position the id 214 is found
+     *
+     * @param walkableJsonObject
+     */
+    private void populateWalkableMap(JsonObject walkableJsonObject) {
+        JsonArray dataArray = walkableJsonObject.getJsonArray("data");
+        boolean[][] walkableArray = new boolean[MAP_WIDTH][MAP_HEIGHT];
+
+        for (int i = 0; i < dataArray.size(); i++) {
+            boolean isWalkable = false;
+            if (dataArray.getInt(i) == 214) {
+                isWalkable = true;
+            }
+
+            walkableArray[i % MAP_WIDTH][i / MAP_HEIGHT] = isWalkable;
+        }
+
+        this.walkableMap = new WalkableMap(walkableArray);
+    }
+
+    private void populateTargetAreas(JsonObject objectsJsonObject) {
+        JsonArray targetsJsonArray = objectsJsonObject.getJsonArray("objects");
+        targetAreas = new TargetArea[targetsJsonArray.size()];
+
+        for (int i = 0; i < targetsJsonArray.size(); i++) {
+            JsonObject targetArea = targetsJsonArray.getJsonObject(i);
+
+            String name = targetArea.getString("name");
+            TargetArea.TargetAreaType targetAreaType = TargetArea.TargetAreaType.valueOf(targetArea.getString("type"));
+            Point2D pos = new Point2D.Double(targetArea.getInt("x"), targetArea.getInt("y"));
+            Point2D size = new Point2D.Double(targetArea.getInt("width"), targetArea.getInt("height"));
+
+            targetAreas[i] = new TargetArea(name, targetAreaType, pos, size);
         }
     }
 
@@ -76,6 +123,14 @@ public class TiledMap implements Drawable {
         for (TiledLayer tiledLayer : tiledLayers) {
             tiledLayer.draw(graphics);
         }
+    }
+
+    public WalkableMap getWalkableMap() {
+        return walkableMap;
+    }
+
+    public TargetArea[] getTargetAreas() {
+        return targetAreas;
     }
 
     public static int getMapWidth() {
