@@ -1,5 +1,6 @@
 package MapData;
 
+import NPCLogic.DistanceMap;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.json.Json;
@@ -31,7 +32,7 @@ public class MapDataController implements Drawable {
 
     private WalkableMap walkableMap;
     private TargetArea[] targetAreas;
-
+    private DistanceMap[] distanceMaps;
     /**
      * constructor
      * first the TiledMapImage is created
@@ -79,6 +80,8 @@ public class MapDataController implements Drawable {
             System.out.println("MapDataController.MapDataController: could not find file in " + MAP_LAYOUT_DIR);
             //e.printStackTrace();
         }
+
+        initializeDistanceMaps();
     }
 
     /**
@@ -126,6 +129,31 @@ public class MapDataController implements Drawable {
 
             targetAreas[i] = new TargetArea(name, targetAreaType, pos, size);
         }
+    }
+
+    private void initializeDistanceMaps() {
+        distanceMaps = new DistanceMap[targetAreas.length];
+        for (int i = 0; i < targetAreas.length; i++) {
+            distanceMaps[i] = new DistanceMap(targetAreas[i].getName(), targetAreas[i], walkableMap);
+        }
+    }
+
+    public DistanceMap getDistanceMap(String name) {
+        for (DistanceMap distanceMap : distanceMaps) {
+            if (distanceMap.getMapName().equals(name)) {
+                return distanceMap;
+            }
+        }
+        return null;
+    }
+
+    public DistanceMap getDistanceMap(TargetArea targetArea) {
+        for (DistanceMap distanceMap : distanceMaps) {
+            if (distanceMap.getTarget().equals(targetArea)) {
+                return distanceMap;
+            }
+        }
+        return null;
     }
 
     @Override
