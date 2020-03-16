@@ -1,5 +1,7 @@
 package NPCLogic;
 
+import MainLogic.Main;
+
 import java.awt.geom.Point2D;
 
 public class PathCalculator {

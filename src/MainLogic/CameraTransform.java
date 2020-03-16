@@ -1,3 +1,5 @@
+package MainLogic;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseButton;
 

@@ -1,3 +1,5 @@
+package MainLogic;
+
 import NPCLogic.DistanceMap;
 import NPCLogic.Person;
 import MapData.TargetArea;
@@ -14,7 +16,6 @@ import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -79,14 +80,6 @@ public class Main extends Application {
         }.start();
         canvas.setOnMouseClicked(e -> {
             clickAction(e);
-//            if (e.getButton() == MouseButton.SECONDARY){
-//                this.showNull = !this.showNull;
-//                if (this.showNull){
-//                    System.out.println("Shows: Non CameraTransformed");
-//                } else {
-//                    System.out.println("Shows: CameraTransformed");
-//                }
-//            } else
             if (e.getButton() == MouseButton.PRIMARY){
                 this.init();
             }
@@ -208,13 +201,8 @@ public class Main extends Application {
         Point2D p2d = this.cameraTransform.getCenterPoint();
         double zoom = cameraTransform.getZoom();
         g.clearRect(-(int)p2d.getX(), -(int)p2d.getY(), (int) (canvas.getWidth() / zoom), (int) (canvas.getHeight() / zoom));
-        if (!this.showNull){
-            g.setTransform(this.cameraTransform.getTransform());
-        } else {
-            g.setTransform(new AffineTransform());
-        }
+        g.setTransform(this.cameraTransform.getTransform());
         g.setBackground(Color.black);
-        g.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
         tiledMap.draw(g);
         for (Person person : people) {
             person.draw(g);

@@ -6,6 +6,8 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,6 +23,8 @@ public class TiledMap implements Drawable {
     private static int TILE_SIZE = 32;
 
     private ArrayList<TiledLayer> tiledLayers;
+
+    private BufferedImage mapImage;
 
     public TiledMap() {
         this.tiledLayers = new ArrayList<>();
@@ -51,13 +55,17 @@ public class TiledMap implements Drawable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+        this.mapImage = new BufferedImage(MAP_WIDTH * TILE_SIZE, MAP_HEIGHT * TILE_SIZE, BufferedImage.TYPE_INT_RGB);
+        Graphics graphics = this.mapImage.getGraphics();
+        for (TiledLayer tiledLayer : tiledLayers) {
+            tiledLayer.drawG(graphics);
+        }
     }
 
     @Override
     public void draw(FXGraphics2D graphics) {
-        for (TiledLayer tiledLayer : tiledLayers) {
-            tiledLayer.draw(graphics);
-        }
+        graphics.drawImage(this.mapImage, 0, 0, MAP_WIDTH * TILE_SIZE, MAP_HEIGHT * TILE_SIZE, null);
     }
 
     public static int getMapWidth() {

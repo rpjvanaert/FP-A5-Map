@@ -2,6 +2,7 @@ package MapData;
 
 import org.jfree.fx.FXGraphics2D;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
@@ -21,6 +22,10 @@ public class TiledTile implements Drawable {
 
     @Override
     public void draw(FXGraphics2D graphics) {
+        graphics.drawImage(tileImage, (int) position.getX(), (int) position.getY(), TiledMap.getTileSize(), TiledMap.getTileSize(), null);
+    }
+
+    public void drawG(Graphics graphics){
         graphics.drawImage(tileImage, (int) position.getX(), (int) position.getY(), TiledMap.getTileSize(), TiledMap.getTileSize(), null);
     }
 }

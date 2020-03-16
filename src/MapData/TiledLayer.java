@@ -4,6 +4,7 @@ import org.jfree.fx.FXGraphics2D;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -39,4 +40,11 @@ public class TiledLayer implements Drawable {
             tile.draw(graphics);
         }
     }
+
+    public void drawG(Graphics graphics){
+        for (TiledTile tile : tiles){
+            tile.drawG(graphics);
+        }
+    }
+
 }
