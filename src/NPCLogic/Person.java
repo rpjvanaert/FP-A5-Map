@@ -6,106 +6,95 @@ import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
- * A class to represent a visitor
+ * A class to represent a visitor or artist
  */
 public class Person {
 
     private BufferedImage sprite;
-    private String favoriteGenre;
+    private Genres favoriteGenre;
     private Media soundEffect;
     private MediaPlayer mediaPlayer;
     private PersonLogic personLogic;
 
+    private boolean isArtist = false;
+
     /**
      * A constructor of NPCLogic.Person
-     * @param position the starting position of the NPCLogic.Person
+     *
+     * @param position        the starting position of the NPCLogic.Person
      * @param genreChanceList a list for the probability of liking a Genre
-     * @param speed the movement speed of the NPCLogic.Person
+     * @param speed           the movement speed of the NPCLogic.Person
      */
-    public Person(Point2D position, ArrayList<Integer> genreChanceList, int speed) {
-
-        imageDecider(genreChanceList);
-        this.personLogic = new PersonLogic(position,speed, this);
-
+    public Person(Point2D position, ArrayList<Integer> genreChanceList, int speed, boolean isArtist) {
+        genrePicker(genreChanceList);
+        this.personLogic = new PersonLogic(position, speed, this, isArtist);
     }
 
     /**
-     * Assings the corresponding image and sound according to the liked superGenre
+     * Assigns the corresponding image and sound according to the liked superGenre
+     *
      * @param genreChance
      */
-    public void imageDecider(ArrayList<Integer> genreChance) {
-        int number = (int) (Math.random() * ((genreChance.get(6) - 1) + 1)) + 1;
+    public void genrePicker(ArrayList<Integer> genreChance) {
 
-        if (genreChance.get(0) >= number && number > 0) {
-            try {
-                this.sprite = ImageIO.read(this.getClass().getResourceAsStream("/images/metal.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            this.favoriteGenre = "metal";
-            this.soundEffect = new Media(new File("resources/soundEffects/MetalScream.mp3").toURI().toString());
-        } else if ((genreChance.get(0) + genreChance.get(1)) >= number && number > genreChance.get(0)) {
-            try {
-                this.sprite = ImageIO.read(this.getClass().getResourceAsStream("/images/classic.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            this.favoriteGenre = "classic";
-            this.soundEffect = new Media(new File("resources/soundEffects/ClassicLaugh.mp3").toURI().toString());
-        } else if ((genreChance.get(0) + genreChance.get(1) + genreChance.get(2)) >= number && number > (genreChance.get(0) + genreChance.get(1))) {
-            try {
-                this.sprite = ImageIO.read(this.getClass().getResourceAsStream("/images/country.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            this.favoriteGenre = "Country";
-            this.soundEffect = new Media(new File("resources/soundEffects/CountryAlabama.mp3").toURI().toString());
-        } else if ((genreChance.get(6) - genreChance.get(5) - genreChance.get(4)) >= number && number > (genreChance.get(0) + genreChance.get(1) + genreChance.get(2))) {
-            try {
-                this.sprite = ImageIO.read(this.getClass().getResourceAsStream("/images/rap.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            this.favoriteGenre = "rap";
-            this.soundEffect = new Media(new File("resources/soundEffects/ClassicLaugh.mp3").toURI().toString());
-        } else if ((genreChance.get(6) - genreChance.get(5)) >= number && number > (genreChance.get(6) - genreChance.get(5) - genreChance.get(4))) {
+        String spriteSheetPath;
+        String soundEffectPath;
 
-            try {
-                this.sprite = ImageIO.read(this.getClass().getResourceAsStream("/images/Pop.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            this.favoriteGenre = "Pop";
-            this.soundEffect = new
-
-                    Media(new File("resources/soundEffects/ClassicLaugh.mp3").toURI().toString());
-        } else if (genreChance.get(6) >= number && number > (genreChance.get(6) - genreChance.get(5))) {
-            try {
-                this.sprite = ImageIO.read(this.getClass().getResourceAsStream("/images/electro.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            this.favoriteGenre = "Electro";
-            this.soundEffect = new Media(new File("resources/soundEffects/ClassicLaugh.mp3").toURI().toString());
+        if (isArtist) {
+            spriteSheetPath = "Artist.png";
+            soundEffectPath = "ClassicLaugh.mp3";
         } else {
-            try {
-                this.sprite = ImageIO.read(this.getClass().getResourceAsStream("/images/npc.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            this.favoriteGenre = "npc";
-            this.soundEffect = new Media(new File("resources/soundEffects/ClassicLaugh.mp3").toURI().toString());
+            int number = (int) (Math.random() * ((genreChance.get(6) - 1) + 1)) + 1;
+            if (genreChance.get(0) >= number && number > 0) {
+                spriteSheetPath = "metal.png";
+                soundEffectPath = "MetalScream.mp3";
+                this.favoriteGenre = Genres.METAL;
 
+            } else if ((genreChance.get(0) + genreChance.get(1)) >= number && number > genreChance.get(0)) {
+                spriteSheetPath = "classic.png";
+                soundEffectPath = "ClassicLaugh.mp3";
+                this.favoriteGenre = Genres.CLASSICAL;
+
+            } else if ((genreChance.get(0) + genreChance.get(1) + genreChance.get(2)) >= number && number > (genreChance.get(0) + genreChance.get(1))) {
+                spriteSheetPath = "country.png";
+                soundEffectPath = "CountryAlabama.mp3";
+                this.favoriteGenre = Genres.COUNTRY;
+
+            } else if ((genreChance.get(6) - genreChance.get(5) - genreChance.get(4)) >= number && number > (genreChance.get(0) + genreChance.get(1) + genreChance.get(2))) {
+                spriteSheetPath = "rap.png";
+                soundEffectPath = "ClassicLaugh.mp3";
+                this.favoriteGenre = Genres.RAP;
+
+            } else if ((genreChance.get(6) - genreChance.get(5)) >= number && number > (genreChance.get(6) - genreChance.get(5) - genreChance.get(4))) {
+                spriteSheetPath = "Pop.png";
+                soundEffectPath = "ClassicLaugh.mp3";
+                this.favoriteGenre = Genres.POP;
+
+            } else if (genreChance.get(6) >= number && number > (genreChance.get(6) - genreChance.get(5))) {
+                spriteSheetPath = "electro.png";
+                soundEffectPath = "ClassicLaugh.mp3";
+                this.favoriteGenre = Genres.ELECTRONIC;
+
+            } else {
+                spriteSheetPath = "country.png";
+                soundEffectPath = "ClassicLaugh.mp3";
+                this.favoriteGenre = Genres.COUNTRY;
+            }
         }
+
+        try {
+            this.sprite = ImageIO.read(getClass().getResource("/images/" + spriteSheetPath));
+            this.soundEffect = new Media(getClass().getResource("/soundEffects/" + soundEffectPath).toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         this.mediaPlayer = new MediaPlayer(this.soundEffect);
     }
 
@@ -114,12 +103,11 @@ public class Person {
     }
 
     /**
-     * decides the behavior of the NPCLogic.Person
+     * decides the behavior of the Person
      */
-
     public void update(ArrayList<Person> people) {
 
-this.personLogic.update();
+        this.personLogic.update();
         //colliding handler
         boolean collided = false;
 
@@ -132,14 +120,13 @@ this.personLogic.update();
         if (!collided) {
             this.personLogic.setPosition(this.personLogic.getNewPosition());
         } else {
-            this.personLogic.setTarget(PathCalculator.findRandomClosestWalkable(this.personLogic.getPosition(),this.personLogic.getTargetMapName()));
+            this.personLogic.setTarget(PathCalculator.findRandomClosestWalkable(this.personLogic.getPosition(), this.personLogic.getDistanceMap()));
         }
     }
 
     public void draw(Graphics2D g) {
         g.drawImage(sprite, this.personLogic.getTransform(), null);
     }
-
 
     /**
      * Plays an soundEffect according to the genre
@@ -148,6 +135,7 @@ this.personLogic.update();
         if (this.favoriteGenre.equals("metal")) {
             this.mediaPlayer.setVolume(0.05);
         }
+
         this.mediaPlayer.setStartTime(Duration.millis(0));
         this.mediaPlayer.play();
         this.mediaPlayer.stop();
