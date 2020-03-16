@@ -52,4 +52,11 @@ public class TiledLayer implements Drawable {
             tile.draw(graphics);
         }
     }
+
+    public void drawG(Graphics graphics){
+        for (TiledTile tile : tiles){
+            tile.drawG(graphics);
+        }
+    }
+
 }

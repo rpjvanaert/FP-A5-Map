@@ -8,6 +8,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -30,7 +31,7 @@ public class MapDataController implements Drawable {
     //arraylist where the layers are stored
     private ArrayList<TiledLayer> tiledLayers;
 
-    private WalkableMap walkableMap;
+    private BufferedImage mapImage;
     private static TargetArea[] targetAreas;
     private static DistanceMap[] distanceMaps;
     /**
@@ -82,7 +83,8 @@ public class MapDataController implements Drawable {
             //e.printStackTrace();
         }
 
-        initializeDistanceMaps();
+        this.mapImage = new BufferedImage(MAP_WIDTH * TILE_SIZE, MAP_HEIGHT * TILE_SIZE, BufferedImage.TYPE_INT_RGB);
+        Graphics graphics = this.mapImage.getGraphics();
     }
 
     /**
@@ -160,7 +162,7 @@ public class MapDataController implements Drawable {
 
     @Override
     public void draw(FXGraphics2D graphics) {
-        for (TiledLayer tiledLayer : tiledLayers) {
+        graphics.drawImage(this.mapImage, 0, 0, MAP_WIDTH * TILE_SIZE, MAP_HEIGHT * TILE_SIZE, null);
             tiledLayer.draw(graphics);
         }
     }
