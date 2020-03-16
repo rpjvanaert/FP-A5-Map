@@ -21,7 +21,12 @@ public class CameraTransform {
         this.zoom = 1.0;
         this.centerPoint = new Point2D.Double(0,0);
         node.setOnScroll(event -> {
+            lastMousePos = new Point2D.Double(event.getX(), event.getY());
             zoom *= (1 + event.getDeltaY()/150.0f);
+            centerPoint = new Point2D.Double(
+                    centerPoint.getX() - (lastMousePos.getX()) * zoom,
+                    centerPoint.getY() - (lastMousePos.getY()) * zoom
+            );
         });
 
         node.setOnMouseDragged(event -> {
