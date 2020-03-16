@@ -7,6 +7,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
  * this object is the mother object of the map
  * all the tiled layers are stored here
  */
-public class MapDataController implements Drawable {
+public class MapDataController  {
     //static finals for where you can find the sprites and the layout json file
     private final static String SPRITESHEETS_DIR = "Resources/spritesheets/";
     private final static String MAP_LAYOUT_DIR = "Resources/festmap.json";
@@ -32,8 +33,10 @@ public class MapDataController implements Drawable {
     private ArrayList<TiledLayer> tiledLayers;
 
     private BufferedImage mapImage;
+    private WalkableMap walkableMap;
     private static TargetArea[] targetAreas;
     private static DistanceMap[] distanceMaps;
+
     /**
      * constructor
      * first the TiledMapImage is created
@@ -83,8 +86,13 @@ public class MapDataController implements Drawable {
             //e.printStackTrace();
         }
 
+        initializeDistanceMaps();
+
         this.mapImage = new BufferedImage(MAP_WIDTH * TILE_SIZE, MAP_HEIGHT * TILE_SIZE, BufferedImage.TYPE_INT_RGB);
         Graphics graphics = this.mapImage.getGraphics();
+        for (TiledLayer tiledLayer : tiledLayers) {
+            tiledLayer.drawG(graphics);
+        }
     }
 
     /**
@@ -160,11 +168,8 @@ public class MapDataController implements Drawable {
         return null;
     }
 
-    @Override
-    public void draw(FXGraphics2D graphics) {
+    public void draw(Graphics2D graphics) {
         graphics.drawImage(this.mapImage, 0, 0, MAP_WIDTH * TILE_SIZE, MAP_HEIGHT * TILE_SIZE, null);
-            tiledLayer.draw(graphics);
-        }
     }
 
     public WalkableMap getWalkableMap() {
