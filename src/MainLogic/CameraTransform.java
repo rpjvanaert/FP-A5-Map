@@ -29,14 +29,6 @@ public class CameraTransform {
         });
 
       node.setOnMouseDragged(event ->  mouseDragged(event));
-//            if (event.getButton() == MouseButton.SECONDARY){
-//                centerPoint = new Point2D.Double(
-//                        centerPoint.getX() + (event.getX() - lastMousePos.getX()) / zoom,
-//                        centerPoint.getY() + ( event.getY() - lastMousePos.getY()) / zoom
-//                );
-//            }
-//            lastMousePos = new Point2D.Double(event.getX(), event.getY());
-//        });
 
 
 
@@ -68,17 +60,15 @@ public class CameraTransform {
         }
     }
 
-    public Point2D getRelPoint2D(double x, double y){
-        Point2D.Double relP2D = new Point2D.Double(x * inverseTransform.getScaleX() + inverseTransform.getTranslateX(), y * inverseTransform.getScaleY() + inverseTransform.getTranslateY());
-        return relP2D;
-    }
-        public void mouseDragged(MouseEvent e) {
-            if(e.getButton() == MouseButton.MIDDLE) {
-                centerPoint = new Point2D.Double(
-                        centerPoint.getX() - (lastMousePos.getX() - e.getX()) / zoom,
-                        centerPoint.getY() - (lastMousePos.getY() - e.getY()) / zoom
-                );
-                lastMousePos = new Point2D.Double(e.getX(), e.getY());
-            }
+    public AffineTransform getInverseTransform(){ return this.inverseTransform; }
+
+    public void mouseDragged(MouseEvent e) {
+        if(e.getButton() == MouseButton.MIDDLE) {
+            centerPoint = new Point2D.Double(
+                    centerPoint.getX() - (lastMousePos.getX() - e.getX()) / zoom,
+                    centerPoint.getY() - (lastMousePos.getY() - e.getY()) / zoom
+            );
+            lastMousePos = new Point2D.Double(e.getX(), e.getY());
         }
+    }
 }
