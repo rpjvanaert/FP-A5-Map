@@ -29,8 +29,6 @@ public class Main extends Application {
     private boolean predictedGuests = true;
     private ArrayList<Integer> Prediction = new ArrayList<>();
 
-    private boolean showNull = false;
-
     private static DistanceMap[] distanceMaps;
 
     public static void main(String[] args) {
@@ -76,14 +74,6 @@ public class Main extends Application {
 
         canvas.setOnMouseClicked(e -> {
             clickAction(e);
-//            if (e.getButton() == MouseButton.SECONDARY){
-//                this.showNull = !this.showNull;
-//                if (this.showNull){
-//                    System.out.println("Shows: Non CameraTransformed");
-//                } else {
-//                    System.out.println("Shows: CameraTransformed");
-//                }
-//            } else
 
             if (e.getButton() == MouseButton.PRIMARY) {
                 this.init();
@@ -175,14 +165,17 @@ public class Main extends Application {
     }
 
     public void draw(FXGraphics2D g) {
-        Point2D p2d = this.cameraTransform.getCenterPoint();
-        double zoom = cameraTransform.getZoom();
-        g.clearRect(-(int) p2d.getX(), -(int) p2d.getY(), (int) (canvas.getWidth() / zoom), (int) (canvas.getHeight() / zoom));
-        if (!this.showNull) {
-            g.setTransform(this.cameraTransform.getTransform());
-        } else {
-            g.setTransform(new AffineTransform());
-        }
+        //Gets inverseTransform from cameraTransform so the correct rectangle can be cleared.
+        AffineTransform inverse = this.cameraTransform.getInverseTransform();
+        g.clearRect(
+                (int)inverse.getTranslateX(),
+                (int)inverse.getTranslateY(),
+                (int)(inverse.getScaleX() * this.canvas.getWidth() - inverse.getTranslateX()),
+                (int)(inverse.getScaleY() * this.canvas.getHeight() - inverse.getTranslateY())
+        );
+
+        g.setTransform(this.cameraTransform.getTransform());
+
         g.setBackground(Color.black);
         g.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
 
